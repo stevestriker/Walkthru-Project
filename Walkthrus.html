@@ -17,21 +17,16 @@
 
 <body>
 
-  <nav class="navbar">
-
-    <a href="../index.html" class="logo">
-      ROOT ACCESS
-    </a>
-
+<nav class="navbar">
+    <a class="logo" href="index.html">ROOT ACCESS</a>
     <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
-      <li><a href="../index.html#about">About</a></li>
-      <li><a href="../index.html#resume">Resume</a></li>
-      <li><a href="../index.html#projects">Projects</a></li>
-      <li><a href="walkthroughs.html">Walkthroughs</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="Resume.html">Resume</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="Walkthrus.html">Walkthroughs</a></li>
     </ul>
-
-  </nav>
+</nav>
 
   <section class="hero">
 
@@ -53,7 +48,7 @@
         exploitation, privilege escalation, and lessons learned.
       </p>
 
-      <a href="#machines" class="btn-primary">
+      <a href="#machines" class="btn-primary view-machines-btn">
         View Machines
       </a>
 
@@ -62,67 +57,80 @@
   </section>
 
       <!-- MACHINE CARDS GRID -->
-    <section class="machines">
+   <section class="machines" id="machines">
+        
         <!-- SYMFONOS 1 -->
-        <div class="glass-card machine-card">
+        <div class="glass-card machine-card symfonos-1">
             <span class="difficulty">MEDIUM</span>
             <h3>Symfonos 1</h3>
             <p>
                 Symfonos: 1 is an OSCP-style Linux VM that chains Local File Inclusion (LFI), SMTP log poisoning, and PATH hijacking to achieve root. A masterclass in thinking sideways.
             </p>
-            <a href="pages/symfonos1.html">
+            <a href="Pages/Symfonos1.html" class="card-link">
                 View Walkthrough →
             </a>
         </div>
 
         <!-- SYMFONOS 2 -->
-        <div class="glass-card machine-card">
+        <div class="glass-card machine-card symfonos-2">
             <span class="difficulty">MEDIUM</span>
             <h3>Symfonos 2</h3>
             <p>
                 Anonymous SMB and FTP enumeration → ProFTPD mod_copy → credential reuse → SSH tunneling → LibreNMS RCE → MySQL root. This one's a rabbit hole worth falling into.
             </p>
-            <a href="pages/symfonos2.html">
+            <a href="Pages/Symfonos2.html" class="card-link">
                 View Walkthrough →
             </a>
         </div>
 
         <!-- DC-1 -->
-        <div class="glass-card machine-card">
-            <span class="difficulty">EASY</span>
+        <div class="glass-card machine-card dc-1">
+            <span class="difficulty easy">EASY</span>
             <h3>DC-1</h3>
             <p>
                 Drupal 7 RCE (Drupalgeddon2) → www-data shell → SUID find binary → root in 30 seconds. Sometimes the simplest win is right in front of you.
             </p>
-            <a href="pages/dc-1.html">
+            <a href="Pages/DC-1.html" class="card-link">
                 View Walkthrough →
             </a>
         </div>
 
-        <!-- BRAINPAN 1 -->
-        <div class="glass-card machine-card">
+        <!-- BRAINPAN -->
+        <div class="glass-card machine-card brainpan">
             <span class="difficulty">MEDIUM</span>
             <h3>Brainpan 1</h3>
             <p>
                 Buffer overflow on a Windows binary running on Linux → reverse shell → privilege escalation via man page escape. Exploit dev meets creative privesc.
             </p>
-            <a href="pages/brainpan1.html">
+            <a href="Pages/Brainpan.html" class="card-link">
                 View Walkthrough →
             </a>
         </div>
 
-        <!-- KIOPTRIX 1.1 -->
-        <div class="glass-card machine-card">
-            <span class="difficulty">EASY</span>
+        <!-- KIOPTRIX -->
+        <div class="glass-card machine-card kioptrix">
+            <span class="difficulty easy">EASY</span>
             <h3>Kioptrix 1.1</h3>
             <p>
-                SQL injection → admin access → broken HTML form → command injection attempts. Not every box roots easily. Real learning happens in the struggle.
+                SQL injection → admin access → broken HTML form → command injection attempts. Not every box roasts easily. Real learning happens in the struggle.
             </p>
-            <a href="pages/kioptrix.html">
+            <a href="Pages/Kioptrix.html" class="card-link">
                 View Walkthrough →
             </a>
         </div>
+
     </section>
+
+<script>
+function scrollToMachines() {
+    document.getElementById('machines').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+</script>
+
+
 
 </body>
 
