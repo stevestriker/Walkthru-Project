@@ -1,35 +1,28 @@
-/* ==========================
-   IMPORTS & ROOT VARIABLES
-========================== */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap');
-
 :root {
-    --bg-primary: #111f39;
-    --bg-secondary: #182845;
-    --aqua: #26d9ff;
-    --aqua-glow: #55e8ff;
-    --gold: #bfa57a;
-    --gold-soft: #d2ba91;
-    --text-main: #f2f6fa;
-    --text-muted: #9fb0c8;
-    --card-bg: rgba(20, 35, 60, 0.75);
+  --bg-primary: #111f39;
+  --bg-secondary: #182845;
+  --aqua: #26d9ff;
+  --aqua-glow: #55e8ff;
+  --gold: #bfa57a;
+  --gold-soft: #d2ba91;
+  --text-main: #f2f6fa;
+  --text-muted: #9fb0c8;
+  --card-bg: rgba(20,35,60,.75);
 }
 
-/* ==========================
-   BASE STYLES
-========================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* * {
+    background: rgba(255,0,0,0.1) !important;
+} */
 
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
     color: var(--text-main);
     font-family: 'Rajdhani', sans-serif;
     overflow-x: hidden;
@@ -37,60 +30,61 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
 }
 
 /* ==========================
-   NAVBAR
+   NAVBAR SECTION
 ========================== */
+
 .navbar {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 1400px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    z-index: 999;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1400px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  z-index: 999;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
 }
 
 .logo {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--aqua);
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-decoration: none;
-    text-shadow: 0 0 10px rgba(38, 217, 255, 0.4);
+  font-family: 'Orbitron', sans-serif;
+  color: var(--aqua);
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(38,217,255,.4);
 }
 
 .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links a {
-    color: var(--text-main);
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.9rem;
-    transition: 0.3s ease;
+  color: var(--text-main);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: .9rem;
+  transition: .3s ease;
 }
 
 .nav-links a:hover {
-    color: var(--aqua);
-    text-shadow: 0 0 10px rgba(38, 217, 255, 0.5);
+  color: var(--aqua);
+  text-shadow: 0 0 10px rgba(38,217,255,.5);
 }
 
 
@@ -820,6 +814,7 @@ body {
 /* ==========================
    HERO SECTION
 ========================== */
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -828,6 +823,8 @@ body {
     text-align: center;
     padding: 2rem;
     position: relative;
+    /* Remove any potential overlay */
+    background: transparent !important;
 }
 
 .hero-content {
@@ -837,39 +834,41 @@ body {
 }
 
 .hero-tag {
-    color: var(--aqua-glow);
+    color: #55e8ff !important;
     letter-spacing: 4px;
     text-transform: uppercase;
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: .5rem;
 }
+
+/* MAIN TITLE */
 
 .hero h1 {
     font-family: 'Orbitron', sans-serif;
     font-size: clamp(3rem, 8vw, 6rem);
     line-height: 1.1;
     margin-bottom: 2rem;
-    color: var(--text-main);
+    color: #f5f7fa;
     text-transform: uppercase;
 }
 
 .hero h1 span {
-    color: var(--aqua);
-    text-shadow: 0 0 10px rgba(38, 217, 255, 0.6), 0 0 25px rgba(38, 217, 255, 0.4);
+    color: #26d9ff !important;
+    text-shadow: 0 0 10px rgba(38,217,255,.6), 0 0 25px rgba(38,217,255,.4) !important;
 }
+
+/* DESCRIPTION */
 
 .hero-description {
     max-width: 700px;
     margin: 0 auto;
-    color: var(--text-muted);
+    color: #9fb0c8 !important;
     font-size: 1.2rem;
     line-height: 1.8;
     margin-bottom: 3rem;
 }
 
-/* ==========================
-   BUTTONS
-========================== */
+/* Buttons */
 .btn-primary {
     padding: 1rem 2rem;
     border: 1px solid var(--aqua);
@@ -877,19 +876,37 @@ body {
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 2px;
-    transition: 0.3s ease;
+    transition: .3s ease;
+    position: relative;
     background: transparent;
-    display: inline-block;
 }
 
 .btn-primary:hover {
     transform: translateY(-4px);
-    box-shadow: 0 0 10px rgba(38, 217, 255, 0.5), 0 0 30px rgba(38, 217, 255, 0.3);
+    box-shadow: 0 0 10px rgba(38,217,255,.5), 0 0 30px rgba(38,217,255,.3);
 }
 
+.btn-secondary {
+    padding: 1rem 2rem;
+    border: 1px solid rgba(191,165,122,.5);
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: .3s ease;
+    background: transparent;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 10px rgba(191,165,122,.4);
+}
+ 
+
 /* ==========================
-   MACHINE CARDS
+   MACHINE-CARD SECTION
 ========================== */
+
 .machines {
     width: 90%;
     max-width: 1400px;
@@ -900,55 +917,105 @@ body {
     gap: 2rem;
 }
 
-.glass-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(38, 217, 255, 0.15);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    min-height: 340px;
+.machine-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(17, 31, 57, .75);
+    border: 13px solid rgba(38, 217, 255, .5);
+    backdrop-filter: blur(6px);
+    transition: all .3s ease;
+    min-height: 250px;
+}
+.machine-card h3 {
+    color: #26d9ff;
+    font-family: Orbitron;
+    margin: 1rem 0;
+}
+.machine-card p {
+    color: #c5d2e5;
+    line-height: 1.6;
+}
+.machine-card a {
+    color: #bfa57a;
+    text-decoration: none;
+    font-weight: 600;
+}
+.machine-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 0 20px rgba(38,217,255,.3),
+        0 0 40px rgba(38,217,255,.15);
 }
 
+
+.glass-card {
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow:
+        0 8px 32px rgba(0,0,0,.25);
+    transition: all .3s ease;
+}
 .glass-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(38, 217, 255, 0.4);
-    box-shadow: 0 0 20px rgba(38, 217, 255, 0.15), 0 15px 40px rgba(0, 0, 0, 0.35);
+    border-color: rgba(38,217,255,.4);
+    box-shadow:
+        0 0 20px rgba(38,217,255,.15),
+        0 15px 40px rgba(0,0,0,.35);
+}
+
+
+
+/* ==========================
+   CARD BACKGROUND IMAGES
+========================== */
+.machine-card {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Symfonos 1 - Greek Temple */
+.machine-card.symfonos-1 {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwZTFhIi8+CiAgPCEtLSBHcmVlayB0ZW1wbGUgLS0+CiAgPHBhdGggZD0iTTEwMCAxMDBMMjUwIDUwTDM1MCAxMDBMMzUwIDUwMEwyNTAgNDUwTDEwMCA1MDBaIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4zIi8+CiAgPHBhdGggZD0iTTUwMCAxMDBMNjUwIDUwTDc1MCAxMDBMNzUwIDUwMEw2NTAgNDUwTDUwMCA1MDBaIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4zIi8+CiAgPCEtLSBMZW9uaWQgZWxlbWVudHMgLS0+CiAgPGNpcmNsZSBjeD0iMjUwIiBjeT0iMjUwIiByPSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgogIDxjaXJjbGUgY3g9IjY1MCIgY3k9IjI1MCIgcj0iODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjQiLz4KICA8IS0tIENvZGUgZWxlbWVudHMgLS0+CiAgPHJlY3QgeD0iMjUwIiB5PSIxNTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjUwMCIgeT0iMTUwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KICA8IS0tIERpYWdvbmFsIGxpbmVzIC0tPgogIDxsaW5lIHgxPSIxMDAiIHkxPSI1MDAiIHgyPSIyNTAiIHkyPSI0NTAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjMiLz4KICA8bGluZSB4MT0iNTAwIiB5MT0iNDUwIiB4Mj0iNjUwIiB5Mj0iNTAwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4zIi8+CiAgPCEtLSBDeWJlciBjaXJjbGVzIC0tPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iMTUwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4xIi8+CiAgPGNpcmNsZSBjeD0iNDAwIiBjeT0iMzAwIiByPSIxMDAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjE1Ii8+CiAgPCEtLSBHcmVlayB0ZXh0IC0tPgogIDx0ZXh0IHg9IjE4MCIgeT0iMjUwIiBmaWxsPSIjMjZkOWZmIiBmb250LWZhbWlseT0iTW9ub3NwYWNlIiBmb250LXNpemU9IjE4IiBvcGFjaXR5PSIwLjMiPkvOlc61zrTOs868PC90ZXh0PgogIDx0ZXh0IHg9IjU4MCIgeT0iMjUwIiBmaWxsPSIjMjZkOWZmIiBmb250LWZhbWlseT0iTW9ub3NwYWNlIiBmb250LXNpemU9IjE4IiBvcGFjaXR5PSIwLjMiPkvOlc61zrTOs868PC90ZXh0Pgo8L3N2Zz4=');
+}
+
+/* Symfonos 2 - Musical/Rabbit Hole */
+.machine-card.symfonos-2 {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwZTFhIi8+CiAgPCEtLSBNdXNpY2FsIG5vdGVzIC0tPgogIDxjaXJjbGUgY3g9IjIwMCIgY3k9IjE4MCIgcj0iNjAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KICA8Y2lyY2xlIGN4PSIzMjAiIGN5PSIxODAiIHI9IjYwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4zIi8+CiAgPGNpcmNsZSBjeD0iNDQwIiBjeT0iMTgwIiByPSI2MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMyIvPgogIDxjaXJjbGUgY3g9IjU2MCIgY3k9IjE4MCIgcj0iNjAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KICA8IS0tIExpbmVzIGNvbm5lY3Rpbmcgbm90ZXMgLS0+CiAgPGxpbmUgeDE9IjIwMCIgeTE9IjI0MCIgeDI9IjIwMCIgeTI9IjQwMCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMiIvPgogIDxsaW5lIHgxPSIzMjAiIHkxPSIyNDAiIHgyPSIzMjAiIHkyPSI0MDAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjIiLz4KICA8bGluZSB4MT0iNDQwIiB5MT0iMjQwIiB4Mj0iNDQwIiB5Mj0iNDAwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC4yIi8+CiAgPGxpbmUgeDE9IjU2MCIgeTE9IjI0MCIgeDI9IjU2MCIgeTI9IjQwMCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9IjAuMiIvPgogIDwhLS0gUmFiYml0IGhvbGUgLS0+CiAgPGNpcmNsZSBjeD0iNDAwIiBjeT0iNDAwIiByPSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNCIvPgogIDxjaXJjbGUgY3g9IjQwMCIgY3k9IjQwMCIgcj0iNTAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjYiLz4KICA8IS0tIEZsb3dpbmcgZGF0YSAtLT4KICA8cGF0aCBkPSJNMjAwIDUwMEwyNTAgNDUwTDMwMCA1MDBMMzUwIDQ1MEw0MDAgNTAwTDQ1MCA0NTBMNTAwIDUwMCB6IiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4yIi8+CiAgPCEtLSBTZXJ2ZXIgcmFja3MgLS0+CiAgPHJlY3QgeD0iNjUwIiB5PSIxNTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSIxMDAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KICA8cmVjdCB4PSI2NTAiIHk9IjI4MCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjEwMCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjY1MCIgeT0iNDEwIiB3aWR0aD0iODAiIGhlaWdodD0iMTAwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4yIi8+Cjwvc3ZnPg==');
+}
+
+/* DC-1 - TARDIS/Clean Sci-fi */
+.machine-card.dc-1 {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwZTFhIi8+CiAgPCEtLSBUVkQgU2lsaG91ZXR0ZSAtLT4KICA8cG9seWdvbiBwb2ludHM9IjQwMCwxMDAgNDUwLDI1MCA0MDAsMjUwIDM1MCwyNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiLz4KICA8cG9seWdvbiBwb2ludHM9IjQwMCwxMDAgNDUwLDI1MCA0MDAsMjUwIDM1MCwyNTAiIGZpbGw9IiMyNmQ5ZmYiIG9wYWNpdHk9IjAuMDUiLz4KICA8IS0tIENpcmN1aXQgZWxlbWVudHMgLS0+CiAgPGNpcmNsZSBjeD0iMjUwIiBjeT0iMjUwIiByPSIxMjAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KICA8Y2lyY2xlIGN4PSI1NTAiIGN5PSIyNTAiIHI9IjEyMCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDwhLS0gQ29ubmVjdGlvbiBsaW5lIC0tPgogIDxsaW5lIHgxPSIzNzAiIHkxPSIyNTAiIHgyPSI0MzAiIHkyPSIyNTAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiLz4KICA8IS0tIERhdGEgZmxvdyAtLT4KICA8cGF0aCBkPSJNMjAwIDUwMEwyNTAgNDUwTDMwMCA1MDBMMzUwIDQ1MEw0MDAgNTAwTDQ1MCA0NTBMNTAwIDUwMCB6IiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4yIi8+CiAgPCEtLSBGaW5kIGNvbW1hbmQgLS0+CiAgPHRleHQgeD0iMjUwIiB5PSI0MDAiIGZpbGw9IiMyNmQ5ZmYiIGZvbnQtZmFtaWx5PSJNb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTQiIG9wYWNpdHk9IjAuNCI+ZmluZCAvIC1leGVjIC9iaW4vc2ggPC90ZXh0PgogIDwhLS0gRGF0YWJhc2UgZWxlbWVudHMgLS0+CiAgPHJlY3QgeD0iNjUwIiB5PSIxNTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjY1MCIgeT0iMjUwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KPC9zdmc+');
+}
+
+/* Brainpan - Brain/Cyberpunk */
+.machine-card.brainpan {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwZTFhIi8+CiAgPCEtLSBCcmFpbiBzaWxob3VldHRlIC0tPgogIDxwYXRoIGQ9Ik0zMDAgMjUwIEMzMDAgMTUwIDUwMCAxNTAgNTAwIDI1MCBDNTAwIDM1MCAzMDAgMzUwIDMwMCAyNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIyIiBvcGFjaXR5PSIwLjMiLz4KICA8cGF0aCBkPSJNMzUwIDI1MCBDMzUwIDIwMCA0NTAgMjAwIDQ1MCAyNTAgQzQ1MCAzMDAgMzUwIDMwMCAzNTAgMjUwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjA1Ii8+CiAgPCEtLSBOZXVyYWwgbmV0d29yayAtLT4KICA8Y2lyY2xlIGN4PSIzMjAiIGN5PSIyNTAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSI0MDAiIGN5PSIyNTAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSI0ODAiIGN5PSIyNTAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSIzNjAiIGN5PSIyMDAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSI0NDAiIGN5PSIyMDAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSIzNjAiIGN5PSIzMDAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8Y2lyY2xlIGN4PSI0NDAiIGN5PSIzMDAiIHI9IjEwIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjYiLz4KICA8IS0tIENpcmN1aXRyeSBlbGVtZW50cyAtLT4KICA8Y2lyY2xlIGN4PSIxNTAiIGN5PSIxNTAiIHI9IjUwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4yIi8+CiAgPGNpcmNsZSBjeD0iNjUwIiBjeT0iMTUwIiByPSI1MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDwhLS0gQnVmZmVyIG92ZXJmbG93IC0tPgogIDxwYXRoIGQ9Ik0yMDAgNDUwIEwzMDAgNDUwIEwzMDAgNTAwIEwyMDAgNTAwIEwyMDAgNDUwIFoiIGZpbGw9IiMyNmQ5ZmYiIG9wYWNpdHk9IjAuMSIvPgogIDxwYXRoIGQ9Ik0zMDAgNDUwIEw0MDAgNDUwIEw0MDAgNTAwIEwzMDAgNTAwIEwzMDAgNDUwIFoiIGZpbGw9IiMyNmQ5ZmYiIG9wYWNpdHk9IjAuMDYiLz4KICA8IS0tIFRleHQgLS0+CiAgPHRleHQgeD0iMjUwIiB5PSI0MjAiIGZpbGw9IiMyNmQ5ZmYiIGZvbnQtZmFtaWx5PSJNb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTIiIG9wYWNpdHk9IjAuNCI+QnVmZmVyIE92ZXJmbG93PC90ZXh0Pgo8L3N2Zz4=');
+}
+
+/* Kioptrix - Matrix/90s Cyber */
+.machine-card.kioptrix {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMGEwZTFhIi8+CiAgPCEtLSBNYXRyaXggcmFpbiAtLT4KICA8cGF0aCBkPSJNMTAwIDEwMEwxMjAgOTBMOTAgMTEwTDExMCA4MEwxMDAgMTAwWiIgZmlsbD0iIzI2ZDlmZiIgb3BhY2l0eT0iMC4yIi8+CiAgPHBhdGggZD0iTTE1MCAxMjBMMTcwIDExMEwxNDAgMTMwTDE2MCAxMDBMMTUwIDEyMFoiIGZpbGw9IiMyNmQ5ZmYiIG9wYWNpdHk9IjAuMiIvPgogIDxwYXRoIGQ9Ik0yMDAgMTUwTDIyMCAxNDBMMTkwIDE2MEwyMTAgMTMwTDIwMCAxNTBaIiBmaWxsPSIjMjZkOWZmIiBvcGFjaXR5PSIwLjIiLz4KICA8IS0tIEhUTUwgZm9ybSAtLT4KICA8cmVjdCB4PSIyNTAiIHk9IjE1MCIgd2lkdGg9IjE2MCIgaGVpZ2h0PSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMyIvPgogIDxsaW5lIHgxPSIyNzAiIHkxPSIxODAiIHgyPSIzOTAiIHkyPSIxODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjQiLz4KICA8bGluZSB4MT0iMjcwIiB5MT0iMjAwIiB4Mj0iMzUwIiB5Mj0iMjAwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC40Ii8+CiAgPCEtLSBTUUwgZWxlbWVudHMgLS0+CiAgPHRleHQgeD0iMjUwIiB5PSI0MDAiIGZpbGw9IiMyNmQ5ZmYiIGZvbnQtZmFtaWx5PSJNb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTQiIG9wYWNpdHk9IjAuNSI+JzsgRFJPUCBUQUJMRSB1c2VyczsgLS08L3RleHQ+CiAgPCEtLSBDb21tYW5kIGluanVjdGlvbiBhdHRlbXB0IC0tPgogIDxjaXJjbGUgY3g9IjU1MCIgY3k9IjI1MCIgcj0iODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KICA8Y2lyY2xlIGN4PSI1NTAiIGN5PSIyNTAiIHI9IjUwIiBzdHJva2U9IiMyNmQ5ZmYiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgb3BhY2l0eT0iMC4zIi8+CiAgPCEtLSBTZXJ2ZXIgcmFja3MgLS0+CiAgPHJlY3QgeD0iNjUwIiB5PSIxNTAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgc3Ryb2tlPSIjMjZkOWZmIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjY1MCIgeT0iMjUwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIHN0cm9rZT0iIzI2ZDlmZiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjIiLz4KPC9zdmc+');
+}
+
+/* ==========================
+   CARD CONTENT
+========================== */
+.machine-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .machine-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.machine-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(10, 14, 26, 0.15);  /* ← Lighter overlay */
-    backdrop-filter: blur(2px);           /* ← Less blur */
-    -webkit-backdrop-filter: blur(2px);
-    z-index: 0;
-    border-radius: 20px;
-    transition: all 0.4s ease;
-}
-
-.machine-card:hover::before {
-    background: rgba(10, 14, 26, 0);    /* ← Even lighter on hover */
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-}
-
-.machine-card > * {
-    position: relative;
-    z-index: 1;
+    min-height: 340px;
 }
 
 .machine-card .difficulty {
@@ -961,7 +1028,7 @@ body {
     text-transform: uppercase;
     align-self: flex-start;
     background: rgba(38, 217, 255, 0.15);
-    color: var(--aqua);
+    color: #26d9ff;
     border: 1px solid rgba(38, 217, 255, 0.2);
     font-family: 'Orbitron', monospace;
 }
@@ -973,24 +1040,23 @@ body {
 }
 
 .machine-card h3 {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Orbitron', monospace;
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--aqua);
+    color: #26d9ff;
     margin: 0.5rem 0;
     text-shadow: 0 0 20px rgba(38, 217, 255, 0.2);
 }
 
 .machine-card p {
-    color: var(--text-main);
+    color: #c5d2e5;
     line-height: 1.7;
     font-size: 0.95rem;
     flex-grow: 1;
-    opacity: 0.9;
 }
 
 .machine-card .card-link {
-    color: var(--gold);
+    color: #bfa57a;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
@@ -1004,125 +1070,34 @@ body {
 }
 
 .machine-card .card-link:hover {
-    color: var(--gold-soft);
+    color: #d4c4a0;
     gap: 1rem;
     border-bottom-color: rgba(191, 165, 122, 0.3);
-}
-
-
-/* ==========================
-   CARD BACKGROUND IMAGES
-========================== */
-.machine-card {
-    position: relative; /* ← ADD THIS */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-/* Symfonos 1 - Greek Keys */
-.machine-card.symfonos-1 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%230a0e1a'/%3E%3Cpath d='M50 50 L200 30 L350 50 L350 250 L200 270 L50 250 Z' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.25'/%3E%3Ccircle cx='200' cy='150' r='80' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3Ccircle cx='200' cy='150' r='50' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.2'/%3E%3Ctext x='160' y='120' fill='%2326d9ff' opacity='0.3' font-family='monospace' font-size='16'%3E%3C/text%3E%3C/svg%3E");
-}
-
-/* Symfonos 2 - Musical/Rabbit Holes */
-.machine-card.symfonos-2 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%230a0e1a'/%3E%3Ccircle cx='100' cy='120' r='40' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='200' cy='120' r='40' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='300' cy='120' r='40' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Cline x1='100' y1='160' x2='100' y2='250' stroke='%2326d9ff' stroke-width='1' opacity='0.2'/%3E%3Cline x1='200' y1='160' x2='200' y2='250' stroke='%2326d9ff' stroke-width='1' opacity='0.2'/%3E%3Cline x1='300' y1='160' x2='300' y2='250' stroke='%2326d9ff' stroke-width='1' opacity='0.2'/%3E%3Ccircle cx='200' cy='250' r='50' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.25'/%3E%3C/svg%3E");
-}
-
-/* DC-1 - TARDIS/Sci-fi */
-.machine-card.dc-1 {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%230a0e1a'/%3E%3Cpolygon points='200,60 240,160 160,160' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='130' cy='160' r='70' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3Ccircle cx='270' cy='160' r='70' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3Cline x1='180' y1='160' x2='220' y2='160' stroke='%2326d9ff' stroke-width='2' opacity='0.3'/%3E%3Ctext x='120' y='260' fill='%2326d9ff' opacity='0.3' font-family='monospace' font-size='12'%3Efind . -exec /bin/sh -p %3B%3C/text%3E%3C/svg%3E");
-}
-
-/* Brainpan - Brain/Cyberpunk */
-.machine-card.brainpan {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%230a0e1a'/%3E%3Cpath d='M160 160 C160 100 240 100 240 160 C240 220 160 220 160 160' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Ccircle cx='180' cy='160' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='200' cy='160' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='220' cy='160' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='190' cy='130' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='210' cy='130' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='190' cy='190' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Ccircle cx='210' cy='190' r='6' fill='%2326d9ff' opacity='0.5'/%3E%3Crect x='100' y='100' width='30' height='30' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3Crect x='270' y='100' width='30' height='30' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3C/svg%3E");
-}
-
-/* Kioptrix - Matrix/90s Cyber */
-.machine-card.kioptrix {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%230a0e1a'/%3E%3Crect x='140' y='120' width='120' height='50' stroke='%2326d9ff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3Cline x1='160' y1='140' x2='240' y2='140' stroke='%2326d9ff' stroke-width='1' opacity='0.35'/%3E%3Cline x1='160' y1='155' x2='210' y2='155' stroke='%2326d9ff' stroke-width='1' opacity='0.35'/%3E%3Ctext x='140' y='250' fill='%2326d9ff' opacity='0.35' font-family='monospace' font-size='11'%3Eadmin' --%3C/text%3E%3Ccircle cx='280' cy='160' r='50' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.15'/%3E%3Ccircle cx='280' cy='160' r='30' stroke='%2326d9ff' stroke-width='1' fill='none' opacity='0.2'/%3E%3C/svg%3E");
 }
 
 /* ==========================
    RESPONSIVE
 ========================== */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        gap: 0.5rem;
-        top: 10px;
-        padding: 0.8rem 1rem;
+    body {
+        padding: 2rem 1rem;
     }
-
-    .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
+    
+    .page-header h1 {
+        font-size: 2.5rem;
     }
-
+    
     .machines {
         grid-template-columns: 1fr;
         gap: 1.5rem;
-        padding: 2rem 0 4rem;
     }
-
+    
     .machine-card {
         min-height: 300px;
     }
-
+    
     .machine-card h3 {
         font-size: 1.5rem;
-    }
-
-    .hero h1 {
-        font-size: clamp(2rem, 10vw, 3.5rem);
-    }
-
-    .hero-tag {
-        font-size: 1rem;
-    }
-
-    .hero-description {
-        font-size: 1rem;
-        padding: 0 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 0.5rem;
-    }
-
-    .navbar {
-        width: 95%;
-        padding: 0.6rem 0.8rem;
-    }
-
-    .logo {
-        font-size: 0.9rem;
-    }
-
-    .nav-links a {
-        font-size: 0.7rem;
-        letter-spacing: 1px;
-    }
-
-    .machine-card {
-        min-height: 280px;
-        padding: 1.5rem;
-    }
-
-    .machine-card h3 {
-        font-size: 1.2rem;
-    }
-
-    .machine-card p {
-        font-size: 0.85rem;
     }
 }
 
@@ -1411,4 +1386,69 @@ footer {
     .image-grid {
         grid-template-columns: 1fr;
     }
+}
+
+
+
+/* ========== CYBER DRIFT BACKGROUND ========== */
+.cyber-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: radial-gradient(circle at 20% 30%, #0a0f1f, #010101);
+    overflow: hidden;
+}
+
+#driftCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+}
+
+.light-sweep {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(0, 255, 196, 0) 0%, 
+        rgba(0, 255, 196, 0.08) 40%,
+        rgba(0, 255, 196, 0.12) 50%,
+        rgba(0, 255, 196, 0) 100%);
+    transform: skewX(-20deg);
+    animation: sweepRay 14s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes sweepRay {
+    0% { left: -120%; }
+    40% { left: 120%; }
+    100% { left: 120%; }
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(0deg, rgba(0, 255, 200, 0.05) 0px, rgba(0, 255, 200, 0.05) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(0, 255, 200, 0.05) 0px, rgba(0, 255, 200, 0.05) 1px, transparent 1px, transparent 40px);
+    pointer-events: none;
+    animation: driftGrid 60s linear infinite;
+}
+
+@keyframes driftGrid {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(40px, 40px); }
 }

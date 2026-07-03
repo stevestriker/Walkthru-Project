@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>About | Steve Rangel</title>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a class="logo" href="index.html">ROOT ACCESS</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Resume.html">Resume</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="Walkthrus.html">Walkthroughs</a></li>
+        </ul>
+    </nav>
+
+    <!-- ==========================
+         SLIDER WRAPPER
+         ========================== -->
+    <div class="slider-wrapper">
+
+        <!-- ===== SLIDES CONTAINER ===== -->
+        <div class="slides-container" id="slidesContainer">
+
+            <!-- SLIDE 1: Bering Sea -->
+            <div class="slide active" data-index="0">
+                <img src="Imgs/about/ak1.png" alt="Bering Sea" />
+                <div class="slide-content">
+                    <div class="label">⚓ Resilience</div>
+                    <h2>Bering Sea</h2>
+                    <p>17-hour shifts in subzero conditions. Mechanical failure wasn't an option — neither was quitting. That's where I learned what it means to execute under pressure.</p>
+                    <div class="btn-group">
+                        <a href="Resume.html" class="btn-primary">View Resume</a>
+                        <a href="#readmore" class="btn-secondary">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: Carpentry -->
+            <div class="slide" data-index="1">
+                <img src="Imgs/about/carpentry.jpg" alt="Carpentry" />
+                <div class="slide-content">
+                    <div class="label">🔨 Precision</div>
+                    <h2>Journeyman Carpenter</h2>
+                    <p>25+ kitchens rebuilt from the studs up. Precision, patience, and knowing when to measure twice. Every project taught me to see the whole system before picking up a tool.</p>
+                    <div class="btn-group">
+                        <a href="Resume.html" class="btn-primary">View Resume</a>
+                        <a href="#readmore" class="btn-secondary">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: Travel -->
+            <div class="slide" data-index="2">
+                <img src="Imgs/about/Maldives.JPG" alt="37 Countries" />
+                <div class="slide-content">
+                    <div class="label">🌍 Adaptability</div>
+                    <h2>26 Countries</h2>
+                    <p>From Southeast Asia to South America — adaptability is a mindset, not a skill. Navigating unfamiliar places taught me to read environments and think on my feet.</p>
+                    <div class="btn-group">
+                        <a href="Resume.html" class="btn-primary">View Resume</a>
+                        <a href="#readmore" class="btn-secondary">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: Motorcycles -->
+            <div class="slide" data-index="3">
+                <img src="Imgs/about/Bike1.jpg" alt="Motorcycles" />
+                <div class="slide-content">
+                    <div class="label">⚙️ Engineering</div>
+                    <h2>Rebuilt Rides</h2>
+                    <p>Taking something broken and making it beautiful again. That's engineering. Every rebuild taught me diagnostics, patience, and the joy of bringing things back to life.</p>
+                    <div class="btn-group">
+                        <a href="Resume.html" class="btn-primary">View Resume</a>
+                        <a href="#readmore" class="btn-secondary">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 5: The Lab -->
+            <div class="slide" data-index="4">
+                <img src="Imgs/about/lab.jpg" alt="Pentesting Lab" />
+                <div class="slide-content">
+                    <div class="label">💻 Offensive Mindset</div>
+                    <h2>The Lab</h2>
+                    <p>Now I break things on purpose. Kali, VMs, and the thrill of the exploit. Every box teaches me something new — and I document it all so others can learn too.</p>
+                    <div class="btn-group">
+                        <a href="walkthroughs.html" class="btn-primary">View Walkthroughs</a>
+                        <a href="#readmore" class="btn-secondary">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== ARROW NAVIGATION ===== -->
+        <button class="arrow-nav prev" id="prevBtn" aria-label="Previous">‹</button>
+        <button class="arrow-nav next" id="nextBtn" aria-label="Next">›</button>
+
+        <!-- ===== THUMBNAIL NAVIGATION ===== -->
+        <div class="thumbnail-nav" id="thumbnailNav">
+            <div class="thumb active" data-index="0">
+                <img src="Imgs/about/ak1.png" alt="Bering Sea" />
+            </div>
+            <div class="thumb" data-index="1">
+                <img src="Imgs/about/carpentry-thumb.jpg" alt="Carpentry" />
+            </div>
+            <div class="thumb" data-index="2">
+                <img src="Imgs/about/Maldives.JPG" alt="Travel" />
+            </div>
+            <div class="thumb" data-index="3">
+                <img src="Imgs/about/Bike1.jpg" alt="Motorcycles" />
+            </div>
+            <div class="thumb" data-index="4">
+                <img src="Imgs/about/lab-thumb.jpg" alt="The Lab" />
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================
+         JAVASCRIPT — SLIDER LOGIC
+         ========================== -->
+    <script>
+        (function() {
+
+            const slides = document.querySelectorAll('.slide');
+            const thumbs = document.querySelectorAll('.thumb');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            let isTransitioning = false;
+            let autoPlayInterval = null;
+
+            // === Go to a specific slide ===
+            function goToSlide(index) {
+                if (isTransitioning) return;
+                if (index < 0) index = totalSlides - 1;
+                if (index >= totalSlides) index = 0;
+                if (index === currentIndex) return;
+
+                isTransitioning = true;
+
+                // Update slides
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+
+                // Update thumbnails
+                thumbs.forEach((thumb, i) => {
+                    thumb.classList.toggle('active', i === index);
+                });
+
+                currentIndex = index;
+
+                // Reset transition lock after animation
+                setTimeout(() => {
+                    isTransitioning = false;
+                }, 800);
+            }
+
+            // === Next / Previous ===
+            function nextSlide() {
+                goToSlide(currentIndex + 1);
+            }
+
+            function prevSlide() {
+                goToSlide(currentIndex - 1);
+            }
+
+            // === Event Listeners ===
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            thumbs.forEach((thumb) => {
+                thumb.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    goToSlide(index);
+                });
+            });
+
+            // === Keyboard Navigation ===
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+
+            // === Touch / Swipe Support ===
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].clientX;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].clientX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) nextSlide();
+                    else prevSlide();
+                }
+            }, { passive: true });
+
+            // === Auto-Play (optional) ===
+            function startAutoPlay() {
+                if (autoPlayInterval) clearInterval(autoPlayInterval);
+                autoPlayInterval = setInterval(nextSlide, 6000);
+            }
+
+            function stopAutoPlay() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = null;
+                }
+            }
+
+            // Pause auto-play on hover/click
+            const wrapper = document.querySelector('.slider-wrapper');
+            wrapper.addEventListener('mouseenter', stopAutoPlay);
+            wrapper.addEventListener('mouseleave', startAutoPlay);
+            wrapper.addEventListener('touchstart', stopAutoPlay);
+            wrapper.addEventListener('touchend', startAutoPlay);
+
+            // Start auto-play
+            startAutoPlay();
+
+            // === Preload next image for smoother transitions ===
+            function preloadImage(src) {
+                const img = new Image();
+                img.src = src;
+            }
+
+            // Preload all slide images
+            slides.forEach((slide) => {
+                const img = slide.querySelector('img');
+                if (img) preloadImage(img.src);
+            });
+
+            // Preload all thumbnails
+            thumbs.forEach((thumb) => {
+                const img = thumb.querySelector('img');
+                if (img) preloadImage(img.src);
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
