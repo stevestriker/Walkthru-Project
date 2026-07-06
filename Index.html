@@ -22,64 +22,75 @@
         <li><a href="Walkthrus.html">Walkthroughs</a></li>
     </ul>
 </nav>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+    <div class="loader-gif">
+        <img src="./Imgs/home/striker.png" alt="Striker" class="striker">
+        <img src="./Imgs/home/data-loader.gif" alt="data-loader" class="echo">
+    </div>
+</div>
     
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-background">
-        <!-- Your parallax image goes here -->
+<!-- HERO (Homepage) -->
+<section class="home-hero" id="homeHero">
+    <!-- Parallax Layers -->
+    <div class="parallax-wrapper">
+        <img src="./Imgs/home/Sky.png" class="parallax" data-speedx="0.02" alt="Sky" id="Sky">
+        <img src="./Imgs/home/Sea.png" class="parallax" data-speedx="0.08" alt="Sea" id="Sea">
+        <img src="./Imgs/home/Building5.png" class="parallax" data-speedx="0.12" alt="B5" id="B5">
+        <img src="./Imgs/home/Building6.png" class="parallax" data-speedx="0.15" alt="B6" id="B6">
+        <img src="./Imgs/home/Building3.png" class="parallax" data-speedx="0.20" alt="B3" id="B3">
+        <img src="./Imgs/home/Building4.png" class="parallax" data-speedx="0.25" alt="B4" id="B4">
+        <img src="./Imgs/home/Building1.png" class="parallax" data-speedx="0.30" alt="B1" id="B1">
+        <img src="./Imgs/home/Building2.png" class="parallax" data-speedx="0.35" alt="B2" id="B2">
     </div>
-    <div class="hero-content">
-        <h1>I break things so you don't have to.</h1>
-        <p class="subtitle">Steve Rangel · Offensive Security Engineer</p>
-        <div class="badges">
-            <span>eJPT Certified</span>
-            <span>5+ Vulnerable VMs</span>
-            <span>26 Countries</span>
+
+<!-- Hero Content -->
+<div class="home-hero-content">
+    <h1>I break things<br><span>so you don't have to.</span></h1>
+    
+    <div class="hero-divider"></div>
+    
+    <p class="subtitle">
+        <span class="highlight">Steve Rangel</span> · Offensive Security Engineer
+    </p>
+    
+    <div class="badges">
+        <span class="badge-glow">🔓 eJPT Certified</span>
+        <span class="badge-glow">🎓 BS CIS</span>
+        <span class="badge-glow">⚡ 5+ VM Exploit Walkthroughs</span>
+        <span class="badge-glow">🌍 37 Countries Visited</span>
+    </div>
+    
+    <div class="hero-stats">
+        <div class="stat">
+            <span class="stat-number">5+</span>
+            <span class="stat-label">VMs Exploited</span>
         </div>
-        <div class="buttons">
-            <a href="Walkthrus.html" class="btn-primary">View My Work</a>
-            <a href="Steve_Rangel_Cybersecurity_Resume.pdf" class="btn-secondary" download>Download Resume</a>
+        <div class="stat-divider"></div>
+        <div class="stat">
+            <span class="stat-number">37</span>
+            <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+            <span class="stat-number">eJPT</span>
+            <span class="stat-label">Certified</span>
         </div>
     </div>
-</section>
+    
+    <div class="buttons">
+        <a href="Walkthrus.html" class="btn-primary">View My Work →</a>
+        <a href="Steve_Rangel_Cybersecurity_Resume.pdf" class="btn-secondary" download>Download Resume</a>
+    </div>
+</div>
 
-<!-- QUICK STATS -->
-<section class="stats">
-    <div class="stat-item">
-        <span class="number">5+</span>
-        <span class="label">Vulnerable VMs Exploited</span>
-    </div>
-    <div class="stat-item">
-        <span class="number">3</span>
-        <span class="label">Years of Security Research</span>
-    </div>
-    <div class="stat-item">
-        <span class="number">eJPT</span>
-        <span class="label">Junior Penetration Tester</span>
-    </div>
-    <div class="stat-item">
-        <span class="number">26</span>
-        <span class="label">Countries Visited</span>
-    </div>
-</section>
-
-<!-- FEATURED WORK -->
-<section class="featured">
-    <h2>Featured Walkthroughs</h2>
-    <div class="featured-grid">
-        <div class="featured-card">Symfonos 1</div>
-        <div class="featured-card">DC-1</div>
-        <div class="featured-card">Brainpan 1</div>
-    </div>
-    <a href="walkthroughs.html">View All Walkthroughs →</a>
-</section>
-
-<!-- QUICK ABOUT -->
-<section class="quick-about">
-    <h2>About Me</h2>
-    <p>Systems engineer turned pentester. Bering Sea grit + enterprise dev depth + offensive security precision.</p>
-    <a href="about.html">Read More →</a>
-</section>
+ <!-- ===== SCRIPTS ===== -->
+    <!-- GSAP Library (required for animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <!-- Your custom script -->
+    <script src="Script.js"></script>
     
 </body>
 </html>

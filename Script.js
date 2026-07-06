@@ -1,3 +1,157 @@
+// ==========================
+// LOADER + GSAP INTRO
+// ==========================
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // --- LOADER ---
+    const loader = document.getElementById('loader');
+    const hero = document.getElementById('homeHero');
+    const heroContent = document.getElementById('heroContent');
+    
+    // Force loader to show for minimum 4 seconds
+    const minLoadTime = 4000; // 4 seconds
+    let loadStart = Date.now();
+    
+    // GSAP Timeline
+    const tl = gsap.timeline({
+        defaults: { duration: 0.3, ease: "power2.out" },
+        paused: true
+    });
+    
+    tl.from("#B1", { yPercent: 100, opacity: 0 })
+      .from("#B2", { yPercent: 100, opacity: 0 }, "-=0.2")
+      .from("#B3", { yPercent: 100, opacity: 0 }, "-=0.2")
+      .from("#B4", { yPercent: 100, opacity: 0 }, "-=0.2")
+      .from("#B5", { yPercent: -100, opacity: 0 }, "-=0.2")
+      .from("#B6", { yPercent: -100, opacity: 0 }, "-=0.2")
+      .from("#Sea", { yPercent: -100, opacity: 0 }, "-=0.2")
+      .from("#Sky", { yPercent: -100, opacity: 0, duration: 0.5, ease: "bounce" }, "-=0.2")
+      .call(() => {
+          // Show hero content after images animate
+          heroContent.classList.add('visible');
+      }, [], "-=0.2");
+    
+    // --- FUNCTION TO HIDE LOADER AND START GSAP ---
+    function hideLoaderAndStart() {
+        loader.classList.add('loader-hidden');
+        
+        // Show hero after loader fades
+        setTimeout(() => {
+            hero.classList.add('visible');
+            // Start GSAP timeline
+            tl.play();
+        }, 300);
+    }
+    
+    // --- CHECK IF EVERYTHING IS LOADED ---
+    function checkLoadComplete() {
+        const elapsed = Date.now() - loadStart;
+        const remaining = minLoadTime - elapsed;
+        
+        if (remaining > 0) {
+            // Wait for minimum time
+            setTimeout(hideLoaderAndStart, remaining);
+        } else {
+            hideLoaderAndStart();
+        }
+    }
+    
+    // --- PARALLAX (Mouse Tracking) ---
+    const parallaxImages = document.querySelectorAll('.parallax');
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    
+    document.addEventListener('mousemove', function(e) {
+        // Normalize mouse position (-1 to 1)
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+    
+    function updateParallax() {
+        // Smooth interpolation
+        const smoothFactor = 0.08;
+        currentX += (mouseX - currentX) * smoothFactor;
+        currentY += (mouseY - currentY) * smoothFactor;
+        
+        parallaxImages.forEach(function(img) {
+            const speedX = parseFloat(img.dataset.speedx) || 0.1;
+            const speedY = parseFloat(img.dataset.speedy) || 0.05;
+            const xOffset = currentX * 60 * speedX;
+            const yOffset = currentY * 30 * speedY;
+            
+            // Preserve the GSAP transform and add mouse offset
+            img.style.transform = `translate(calc(-50% + ${xOffset}px), calc(-50% + ${yOffset}px))`;
+        });
+        
+        requestAnimationFrame(updateParallax);
+    }
+    
+    // --- TOUCH SUPPORT ---
+    document.addEventListener('touchmove', function(e) {
+        const touch = e.touches[0];
+        mouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+    
+    document.addEventListener('touchend', function() {
+        mouseX = 0;
+        mouseY = 0;
+    }, { passive: true });
+    
+    // --- START EVERYTHING ---
+    // Start parallax loop
+    updateParallax();
+    
+    // Wait for all images to load
+    const allImages = document.querySelectorAll('.parallax-wrapper img');
+    let imagesLoaded = 0;
+    const totalImages = allImages.length;
+    
+    if (totalImages === 0) {
+        checkLoadComplete();
+    } else {
+        allImages.forEach(function(img) {
+            if (img.complete) {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) checkLoadComplete();
+            } else {
+                img.addEventListener('load', function() {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) checkLoadComplete();
+                });
+                img.addEventListener('error', function() {
+                    imagesLoaded++;
+                    if (imagesLoaded === totalImages) checkLoadComplete();
+                });
+            }
+        });
+    }
+    
+    // Fallback: if images take too long, force load after 6 seconds
+    setTimeout(function() {
+        if (!loader.classList.contains('loader-hidden')) {
+            checkLoadComplete();
+        }
+    }, 6000);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // // ========== CYBER DRIFT CANVAS ANIMATION ==========
 // const canvas = document.getElementById('driftCanvas');
 // if (canvas) {
