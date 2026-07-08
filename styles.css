@@ -2,6 +2,8 @@
    IMPORTS & ROOT VARIABLES
 ========================== */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&display=swap');
+
 
 :root {
     --bg-primary: #111f39;
@@ -31,7 +33,7 @@ html {
 body {
     min-height: 100vh;
     color: var(--text-main);
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Goldman', 'Rajdhani', 'Inter', sans-serif;
     overflow-x: hidden;
     background-image: url('./Imgs/Walkthru-back.gif');
     background-repeat: no-repeat;
@@ -39,6 +41,8 @@ body {
     background-size: cover;
     background-attachment: fixed;
 }
+
+
 
 /* ==========================
    NAVBAR
@@ -84,7 +88,7 @@ body {
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     transition: 0.3s ease;
 }
 
@@ -827,6 +831,7 @@ RESUME PAGE STYLES
 ========================== */
 
 .resume-container * {
+font-family: 'Rajdhani', 'Inter', sans-serif !important;    
 font-size: 1.4rem;
 }
 
@@ -947,7 +952,7 @@ box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
 
 .resume-card h3 {
 font-family: 'Orbitron', sans-serif;
-font-size: 0.9rem;
+font-size: 1.3rem;
 color: var(--aqua);
 letter-spacing: 2px;
 text-transform: uppercase;
@@ -1018,7 +1023,7 @@ gap: 2rem;
 /* Experience Items */
 .exp-item {
 padding: 1rem 0;
-border-bottom: 1px solid rgba(255, 255, 255, .05);
+border-bottom: 1px solid rgba(255, 255, 255, .15);
 }
 
 .exp-item:last-child {
@@ -1037,7 +1042,7 @@ margin-bottom: 0.25rem;
 .exp-header .company {
 font-weight: 600;
 color: var(--text-main);
-font-size: 1.05rem;
+font-size: 1.4rem;
 }
 
 .exp-header .company .location {
@@ -1827,5 +1832,297 @@ footer {
     
     .image-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+
+/* ==========================
+    PROJECTS PAGE STYLES
+========================== */
+
+.proj-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 2rem 4rem;
+}
+
+/* Section Header */
+.proj-section-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.proj-section-header h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    color: var(--aqua);
+    text-shadow: 0 0 30px rgba(38, 217, 255, 0.2);
+    margin-bottom: 0.5rem;
+}
+
+.proj-section-header p {
+    color: var(--text-muted);
+    font-size: 1.35rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.proj-section-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--aqua), transparent);
+    margin: 1rem auto 2rem;
+    border-radius: 2px;
+    opacity: 0.5;
+}
+
+/* Project Section */
+.proj-section {
+    margin-bottom: 5rem;
+}
+
+.proj-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Flex Card Slider */
+.proj-slider-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.proj-slider-container {
+    height: 420px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 0.5rem;
+}
+
+.proj-card {
+    flex: 0 0 80px;
+    border-radius: 2rem;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    transition: flex 0.6s cubic-bezier(0.28, -0.03, 0, 0.99),
+                box-shadow 0.4s ease;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    min-height: 380px;
+    clip-path: inset(0 0 5px 0);
+
+}
+
+.proj-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(10, 14, 26, 0.85) 0%, transparent 60%);
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+
+.proj-card:hover::before {
+    opacity: 0.8;
+}
+
+.proj-card .proj-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.proj-card .proj-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(38, 217, 255, 0.15);
+    border: 1px solid rgba(38, 217, 255, 0.2);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--aqua);
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+}
+
+.proj-card .proj-desc {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+    transition-delay: 0.2s;
+    max-width: 420px;
+}
+
+.proj-card .proj-desc h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.proj-card .proj-desc p {
+    color: var(--aqua);
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.proj-card .proj-tag {
+    display: inline-block;
+    padding: 0.15rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(38, 217, 255, 0.12);
+    border: 1px solid rgba(38, 217, 255, 0.1);
+    color: var(--aqua);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.3rem;
+}
+
+/* Expanded State */
+.proj-card.proj-expanded {
+    flex: 0 0 580px;
+}
+
+.proj-card.proj-expanded .proj-desc {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.proj-card:not(.proj-expanded) .proj-desc {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Card Background Images (replace with your own) */
+.proj-landing-1 { background-image: url('./Imgs/projects/Trang.jpg'); }
+.proj-landing-2 { background-image: url('./Imgs/projects/Spirit.png'); }
+.proj-landing-3 { background-image: url('./Imgs/projects/Pure.png'); }
+.proj-landing-4 { background-image: url('./Imgs/projects/NhoCafe.png'); }
+.proj-react-1 { background-image: url('./Imgs/projects/react-1.jpg'); }
+.proj-react-2 { background-image: url('./Imgs/projects/react-2.jpg'); }
+.proj-react-3 { background-image: url('./Imgs/projects/react-3.jpg'); }
+.proj-anim-1 { background-image: url('./Imgs/projects/Saranda-Exp.png'); }
+.proj-anim-2 { background-image: url('./Imgs/projects/Panorama.png'); }
+.proj-anim-3 { background-image: url('./Imgs/projects/NasaScreen.png'); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .proj-card.proj-expanded {
+        flex: 0 0 420px;
+    }
+}
+
+@media (max-width: 768px) {
+    .proj-container {
+        padding: 100px 1rem 3rem;
+    }
+
+    .proj-section-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .proj-slider-container {
+        height: 340px;
+        gap: 0.6rem;
+        padding: 0;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .proj-card {
+        flex: 0 0 200px;
+        min-height: 300px;
+        scroll-snap-align: start;
+        border-radius: 1.2rem;
+    }
+
+    .proj-card.proj-expanded {
+        flex: 0 0 300px;
+    }
+
+    .proj-card .proj-desc {
+        max-width: 200px;
+    }
+
+    .proj-card .proj-desc h4 {
+        font-size: 0.9rem;
+    }
+
+    .proj-card .proj-desc p {
+        font-size: 0.75rem;
+    }
+
+    .proj-card .proj-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .proj-card {
+        flex: 0 0 160px;
+        min-height: 250px;
+    }
+
+    .proj-card.proj-expanded {
+        flex: 0 0 240px;
+    }
+
+    .proj-card .proj-content {
+        padding: 1rem;
+    }
+
+    .proj-card .proj-desc h4 {
+        font-size: 0.8rem;
+    }
+
+    .proj-card .proj-desc p {
+        font-size: 0.7rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .proj-card .proj-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Mobile touch scroll hint */
+@media (max-width: 768px) {
+    .proj-slider-wrapper::after {
+        content: '← swipe →';
+        display: block;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        margin-top: 0.5rem;
+        opacity: 0.5;
     }
 }

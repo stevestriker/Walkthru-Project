@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
           // Show hero content after images animate
           heroContent.classList.add('visible');
       }, [], "-=0.2");
+
+      console.log('heroContent element:', heroContent);
+
     
     // --- FUNCTION TO HIDE LOADER AND START GSAP ---
     function hideLoaderAndStart() {
@@ -57,89 +60,167 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // --- PARALLAX (Mouse Tracking) ---
-    const parallaxImages = document.querySelectorAll('.parallax');
-    let mouseX = 0;
-    let mouseY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    
-    document.addEventListener('mousemove', function(e) {
-        // Normalize mouse position (-1 to 1)
-        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+// ==========================
+// PARALLAX — FULL XY MOVEMENT
+// ==========================
+
+const parallaxImages = document.querySelectorAll('.parallax');
+let mouseX = 0, mouseY = 0;
+let currentX = 0, currentY = 0;
+
+document.addEventListener('mousemove', function(e) {
+    // Normalize mouse position (-1 to 1)
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function updateParallax() {
+    // Smooth interpolation
+    const smoothFactor = 1;
+    currentX += (mouseX - currentX) * smoothFactor;
+    currentY += (mouseY - currentY) * smoothFactor;
+
+    parallaxImages.forEach(function(img) {
+        const speedX = parseFloat(img.dataset.speedx) || 0.1;
+        const speedY = parseFloat(img.dataset.speedy) || 0.05;
+        
+        // Increase movement range
+        const xOffset = currentX * 80 * speedX;
+        const yOffset = currentY * 60 * speedY;
+        
+        img.style.transform = `translate(calc(-50% + ${xOffset}px), calc(-50% + ${yOffset}px))`;
     });
+
+    requestAnimationFrame(updateParallax);
+}
+
+updateParallax();
     
-    function updateParallax() {
-        // Smooth interpolation
-        const smoothFactor = 0.08;
-        currentX += (mouseX - currentX) * smoothFactor;
-        currentY += (mouseY - currentY) * smoothFactor;
-        
-        parallaxImages.forEach(function(img) {
-            const speedX = parseFloat(img.dataset.speedx) || 0.1;
-            const speedY = parseFloat(img.dataset.speedy) || 0.05;
-            const xOffset = currentX * 60 * speedX;
-            const yOffset = currentY * 30 * speedY;
-            
-            // Preserve the GSAP transform and add mouse offset
-            img.style.transform = `translate(calc(-50% + ${xOffset}px), calc(-50% + ${yOffset}px))`;
-        });
-        
-        requestAnimationFrame(updateParallax);
-    }
-    
-    // --- TOUCH SUPPORT ---
-    document.addEventListener('touchmove', function(e) {
-        const touch = e.touches[0];
-        mouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
-        mouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
-    }, { passive: true });
-    
-    document.addEventListener('touchend', function() {
-        mouseX = 0;
-        mouseY = 0;
-    }, { passive: true });
-    
-    // --- START EVERYTHING ---
-    // Start parallax loop
-    updateParallax();
-    
-    // Wait for all images to load
-    const allImages = document.querySelectorAll('.parallax-wrapper img');
-    let imagesLoaded = 0;
-    const totalImages = allImages.length;
-    
-    if (totalImages === 0) {
-        checkLoadComplete();
-    } else {
-        allImages.forEach(function(img) {
-            if (img.complete) {
+// --- TOUCH SUPPORT ---
+document.addEventListener('touchmove', function(e) {
+    const touch = e.touches[0];
+    mouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
+}, { passive: true });
+
+document.addEventListener('touchend', function() {
+    mouseX = 0;
+    mouseY = 0;
+}, { passive: true });
+
+// --- START EVERYTHING ---
+// Start parallax loop
+updateParallax();
+
+// Wait for all images to load
+const allImages = document.querySelectorAll('.parallax-wrapper img');
+let imagesLoaded = 0;
+const totalImages = allImages.length;
+
+if (totalImages === 0) {
+    checkLoadComplete();
+} else {
+    allImages.forEach(function(img) {
+        if (img.complete) {
+            imagesLoaded++;
+            if (imagesLoaded === totalImages) checkLoadComplete();
+        } else {
+            img.addEventListener('load', function() {
                 imagesLoaded++;
                 if (imagesLoaded === totalImages) checkLoadComplete();
-            } else {
-                img.addEventListener('load', function() {
-                    imagesLoaded++;
-                    if (imagesLoaded === totalImages) checkLoadComplete();
-                });
-                img.addEventListener('error', function() {
-                    imagesLoaded++;
-                    if (imagesLoaded === totalImages) checkLoadComplete();
-                });
-            }
+            });
+            img.addEventListener('error', function() {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) checkLoadComplete();
+            });
+        }
+    });
+}
+
+// Fallback: if images take too long, force load after 6 seconds
+setTimeout(function() {
+    if (!loader.classList.contains('loader-hidden')) {
+        checkLoadComplete();
+    }
+}, 6000);
+});
+
+// ==========================
+// PROJECTS PAGE — SLIDER LOGIC
+// ==========================
+
+function projToggleCard(card) {
+    // If the clicked card is already expanded, collapse it
+    if (card.classList.contains('proj-expanded')) {
+        card.classList.remove('proj-expanded');
+        return;
+    }
+
+    // Find all cards in the same slider container
+    const container = card.closest('.proj-slider-container');
+    const cards = container.querySelectorAll('.proj-card');
+
+    // Remove expanded from all cards in this container
+    cards.forEach(c => c.classList.remove('proj-expanded'));
+
+    // Add expanded to clicked card
+    card.classList.add('proj-expanded');
+}
+
+// Click outside to collapse
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.proj-card')) {
+        document.querySelectorAll('.proj-card.proj-expanded').forEach(card => {
+            card.classList.remove('proj-expanded');
         });
     }
-    
-    // Fallback: if images take too long, force load after 6 seconds
-    setTimeout(function() {
-        if (!loader.classList.contains('loader-hidden')) {
-            checkLoadComplete();
+});
+
+// Auto-expand first card on load for each slider
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.proj-slider-container').forEach(container => {
+        const firstCard = container.querySelector('.proj-card');
+        if (firstCard) {
+            firstCard.classList.add('proj-expanded');
         }
-    }, 6000);
+    });
 });
 
 
 
+// ==========================
+// HOME — GSAP STAGGER GRID
+// ==========================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const blocks = document.querySelectorAll('.gsap-fade-up');
+
+    // Staggered entrance
+    gsap.fromTo(blocks, 
+        { opacity: 0, y: 40 },
+        {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+            onComplete: () => {
+                blocks.forEach(block => block.classList.add('gsap-visible'));
+            }
+        }
+    );
+
+    // Optional: Mouse tracking micro-movement on blocks
+    document.addEventListener('mousemove', function(e) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        
+        blocks.forEach((block, i) => {
+            const speed = 0.02 + (i * 0.005);
+            block.style.transform = `translate(${x * 8 * speed}px, ${y * 6 * speed}px)`;
+        });
+    });
+});
 
 
 

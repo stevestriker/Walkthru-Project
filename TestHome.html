@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Styles.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- ==========================
+     HOMEPAGE — GRID LAYOUT
+     ========================== -->
+
+<section class="home-grid" id="homeGrid">
+
+    <!-- BLOCK 1: HERO -->
+    <div class="grid-block hero-block gsap-fade-up">
+        <div class="hero-badge">🔓 Offensive Security Engineer</div>
+        <h1>I break things<br><span>so you don't have to.</span></h1>
+        <p class="hero-sub">Steve Rangel · eJPT · 5+ VM Walkthroughs</p>
+        <div class="hero-actions">
+            <a href="Walkthrus.html" class="btn-primary">View My Work →</a>
+            <link rel="stylesheet" href="Styles.css">
+            <a href="Steve_Rangel_Cybersecurity_Resume.pdf" class="btn-secondary" download>Download Resume</a>
+        </div>
+    </div>
+
+    <!-- BLOCK 2: STATS -->
+    <div class="grid-block stats-block gsap-fade-up" data-delay="100">
+        <div class="stat-card">
+            <span class="stat-number">5+</span>
+            <span class="stat-label">VMs Exploited</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">37</span>
+            <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">eJPT</span>
+            <span class="stat-label">Certified</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">🎓</span>
+            <span class="stat-label">BS CIS</span>
+        </div>
+    </div>
+
+    <!-- BLOCK 3: FEATURED WORK -->
+    <div class="grid-block featured-block gsap-fade-up" data-delay="200">
+        <h3>⚡ Featured Walkthroughs</h3>
+        <div class="featured-list">
+            <a href="Pages/Symfonos1.html" class="featured-item">
+                <span class="featured-name">Symfonos 1</span>
+                <span class="featured-tag">LFI · Log Poisoning</span>
+            </a>
+            <a href="Pages/DC-1.html" class="featured-item">
+                <span class="featured-name">DC-1</span>
+                <span class="featured-tag">Drupalgeddon2 · SUID</span>
+            </a>
+            <a href="Pages/Brainpan.html" class="featured-item">
+                <span class="featured-name">Brainpan 1</span>
+                <span class="featured-tag">Buffer Overflow · Privesc</span>
+            </a>
+        </div>
+        <a href="Walkthrus.html" class="view-all">View All Walkthroughs →</a>
+    </div>
+
+    <!-- BLOCK 4: QUICK ABOUT -->
+    <div class="grid-block about-block gsap-fade-up" data-delay="300">
+        <h3>🧠 About Me</h3>
+        <p>Systems engineer turned pentester. Bering Sea grit + enterprise dev depth + offensive security precision.</p>
+        <a href="About.html" class="read-more">Read More →</a>
+    </div>
+
+    <!-- BLOCK 5: SKILLS (full width) -->
+    <div class="grid-block skills-block gsap-fade-up" data-delay="400">
+        <h3>🛠️ Tools & Skills</h3>
+        <div class="skills-cloud">
+            <span>Nmap</span><span>Metasploit</span><span>Burp Suite</span>
+            <span>Gobuster</span><span>Wireshark</span><span>Kali Linux</span>
+            <span>Python</span><span>Bash</span><span>JavaScript</span>
+            <span>Docker</span><span>Git</span><span>HTB</span>
+        </div>
+    </div>
+
+</section>
+
+<script src="./Script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+</body>
+</html>
