@@ -1,95 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Steve Rangel</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Goldman:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <a class="logo" href="Index.html">ROOT ACCESS</a>
-    <ul class="nav-links">
-        <li><a href="Index.html">Home</a></li>
-        <li><a href="Resume.html">Resume</a></li>
-				<li><a href="Walkthrus.html">Walkthroughs</a></li>
-        <li><a href="Projects.html">Projects</a></li>
-				<li><a href="About.html">About</a></li>
-    </ul>
-</nav>
+    <!-- ==========================
+         NAVBAR
+    ========================== -->
+    <!-- NAVBAR -->
+        <nav class="navbar">
+            <a class="logo" href="Index.html">ROOT ACCESS</a>
+            <ul class="nav-links">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Resume.html">Resume</a></li>
+                <li><a href="Walkthrus.html">Walkthroughs</a></li>
+                <li><a href="Projects.html">Projects</a></li>
+                <li><a href="About.html">About</a></li>
+            </ul>
+        </nav>
 
-<!-- LOADER -->
-<div class="loader" id="loader">
-    <div class="loader-gif">
-        <img src="./Imgs/home/striker.png" alt="Striker" class="striker">
-        <img src="./Imgs/home/data-loader.gif" alt="data-loader" class="echo">
-    </div>
-</div>
-    
-<!-- HERO (Homepage) -->
-<section class="home-hero" id="homeHero">
-    <!-- Parallax Layers -->
-   <div class="parallax-wrapper">
-			<img src="./Imgs/home/Sky.png" class="parallax" data-speedx="0.02" data-speedy="0.015" alt="Sky" id="Sky">
-			<img src="./Imgs/home/Sea.png" class="parallax" data-speedx="0.08" data-speedy="0.04" alt="Sea" id="Sea">
-			<img src="./Imgs/home/Building5.png" class="parallax" data-speedx="0.12" data-speedy="0.06" alt="B5" id="B5">
-			<img src="./Imgs/home/Building6.png" class="parallax" data-speedx="0.15" data-speedy="0.08" alt="B6" id="B6">
-			<img src="./Imgs/home/Building3.png" class="parallax" data-speedx="0.20" data-speedy="0.10" alt="B3" id="B3">
-			<img src="./Imgs/home/Building4.png" class="parallax" data-speedx="0.25" data-speedy="0.12" alt="B4" id="B4">
-			<img src="./Imgs/home/Building1.png" class="parallax" data-speedx="0.30" data-speedy="0.15" alt="B1" id="B1">
-			<img src="./Imgs/home/Building2.png" class="parallax" data-speedx="0.35" data-speedy="0.18" alt="B2" id="B2">
-	 </div>
+    <!-- ==========================
+         HOME GRID
+    ========================== -->
+    <section class="home-grid" id="homeGrid">
 
-<!-- Hero Content -->
-<div class="home-hero-content" id="heroContent">
-    <h1>I break things<br><span>so you don't have to.</span></h1>
-    
-    <div class="hero-divider"></div>
-    
-    <p class="subtitle">
-        <span class="highlight">Steve Rangel</span> · Offensive Security Engineer
-    </p>
-    
-    <div class="badges">
-        <span class="badge-glow">🔓 eJPT Certified</span>
-        <span class="badge-glow">🎓 BS CIS</span>
-        <span class="badge-glow">⚡ 5+ VM Exploit Walkthroughs</span>
-        <span class="badge-glow">🌍 37 Countries Visited</span>
-    </div>
-    
-    <div class="hero-stats">
-        <div class="stat">
-            <span class="stat-number">5+</span>
-            <span class="stat-label">VMs Exploited</span>
+        <!-- BLOCK 1: HERO -->
+        <div class="grid-block hero-block gsap-fade-up">
+            <div class="hero-badge">🔓 Offensive Security Engineer</div>
+            <h1>I break things<br><span>so you don't have to.</span></h1>
+            <p class="hero-sub">Steve Rangel · eJPT · 5+ VM Walkthroughs</p>
+            <div class="hero-actions">
+                <a href="Walkthrus.html" class="btn-primary">View My Work →</a>
+                <a href="Steve_Rangel_Cybersecurity_Resume.pdf" class="btn-secondary btn-jiggle" download>Download Resume</a>
+            </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-            <span class="stat-number">37</span>
-            <span class="stat-label">Countries</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-            <span class="stat-number">eJPT</span>
-            <span class="stat-label">Certified</span>
-        </div>
-    </div>
-    
-    <div class="buttons">
-        <a href="Walkthrus.html" class="btn-primary">View My Work →</a>
-        <a href="Steve_Rangel_Cybersecurity_Resume.pdf" class="btn-secondary" download>Download Resume</a>
-    </div>
-</div>
 
- <!-- ===== SCRIPTS ===== -->
-    <!-- GSAP Library (required for animations) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    
+        <!-- BLOCK 2: STATS -->
+        <div class="grid-block gsap-fade-up" data-delay="100">
+            <div class="stat-card">
+                <span class="stat-number">5+</span>
+                <span class="stat-label">VMs Exploited &  Documented</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">37</span>
+                <span class="stat-label">Countries Explored</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">eJPT</span>
+                <span class="stat-label">Certified</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">🎓</span>
+                <span class="stat-label">Bachelors CIS</span>
+            </div>
+        </div>
+
+        <!-- BLOCK 3: FEATURED WORK -->
+        <div class="glass-card grid-block featured-block gsap-fade-up" data-delay="200">
+            <h3>⚡ Featured Walkthroughs</h3>
+            <div class="featured-list">
+                <a href="Pages/Symfonos1.html" class="featured-item">
+                    <span class="featured-name">Symfonos 1</span>
+                    <span class="featured-tag">LFI · Log Poisoning</span>
+                </a>
+                <a href="Pages/DC-1.html" class="featured-item">
+                    <span class="featured-name">DC-1</span>
+                    <span class="featured-tag">Drupalgeddon2 · SUID</span>
+                </a>
+                <a href="Pages/Brainpan.html" class="featured-item">
+                    <span class="featured-name">Brainpan 1</span>
+                    <span class="featured-tag">Buffer Overflow · Privesc</span>
+                </a>
+            </div>
+            <a href="Walkthrus.html" class="view-all">View All Walkthroughs →</a>
+        </div>
+
+        <!-- BLOCK 4: QUICK ABOUT -->
+        <div class="grid-block about-block gsap-fade-up" data-delay="300">
+            <h3>🧠 About Me</h3>
+            <p>Systems engineer turned pentester. Bering Sea grit + enterprise dev depth + offensive security precision.</p>
+            <a href="About.html" class="read-more">Read More →</a>
+        </div>
+
+        <!-- BLOCK 5: SKILLS -->
+        <div class="grid-block skills-block gsap-fade-up" data-delay="400">
+            <h3>🛠️ Tools &amp; Skills</h3>
+            <div class="skills-cloud">
+                <span>Nmap</span><span>Metasploit</span><span>Burp Suite</span>
+                <span>Gobuster</span><span>Wireshark</span><span>Kali Linux</span>
+                <span>Python</span><span>Bash</span><span>JavaScript</span>
+                <span>Docker</span><span>Git</span><span>HTB</span>
+                <span>John the Ripper</span><span>Netcat</span><span>SQL</span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ==========================
+         FOOTER
+    ========================== -->
+    <footer>
+        <p>© 2025 ROOT ACCESS | Built for offensive security professionals</p>
+    </footer>
+
     <script src="Script.js"></script>
-    
+
 </body>
 </html>

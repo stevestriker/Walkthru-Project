@@ -1,173 +1,109 @@
-// ==========================
-// LOADER + GSAP INTRO
-// ==========================
+// ============================================================
+// MASTER SCRIPT — ALL PAGES
+// ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // --- LOADER ---
-    const loader = document.getElementById('loader');
-    const hero = document.getElementById('homeHero');
-    const heroContent = document.getElementById('heroContent');
-    
-    // Force loader to show for minimum 4 seconds
-    const minLoadTime = 4000; // 4 seconds
-    let loadStart = Date.now();
-    
-    // GSAP Timeline
-    const tl = gsap.timeline({
-        defaults: { duration: 0.3, ease: "power2.out" },
-        paused: true
-    });
-    
-    tl.from("#B1", { yPercent: 100, opacity: 0 })
-      .from("#B2", { yPercent: 100, opacity: 0 }, "-=0.2")
-      .from("#B3", { yPercent: 100, opacity: 0 }, "-=0.2")
-      .from("#B4", { yPercent: 100, opacity: 0 }, "-=0.2")
-      .from("#B5", { yPercent: -100, opacity: 0 }, "-=0.2")
-      .from("#B6", { yPercent: -100, opacity: 0 }, "-=0.2")
-      .from("#Sea", { yPercent: -100, opacity: 0 }, "-=0.2")
-      .from("#Sky", { yPercent: -100, opacity: 0, duration: 0.5, ease: "bounce" }, "-=0.2")
-      .call(() => {
-          // Show hero content after images animate
-          heroContent.classList.add('visible');
-      }, [], "-=0.2");
 
-      console.log('heroContent element:', heroContent);
+    console.log('✅ DOM ready — master script running');
 
-    
-    // --- FUNCTION TO HIDE LOADER AND START GSAP ---
-    function hideLoaderAndStart() {
-        loader.classList.add('loader-hidden');
-        
-        // Show hero after loader fades
-        setTimeout(() => {
-            hero.classList.add('visible');
-            // Start GSAP timeline
-            tl.play();
-        }, 300);
-    }
-    
-    // --- CHECK IF EVERYTHING IS LOADED ---
-    function checkLoadComplete() {
-        const elapsed = Date.now() - loadStart;
-        const remaining = minLoadTime - elapsed;
-        
-        if (remaining > 0) {
-            // Wait for minimum time
-            setTimeout(hideLoaderAndStart, remaining);
-        } else {
-            hideLoaderAndStart();
-        }
-    }
-    
-// ==========================
-// PARALLAX — FULL XY MOVEMENT
-// ==========================
+    // ==========================
+    // 1. HOMEPAGE — GSAP STAGGER
+    // ==========================
 
-const parallaxImages = document.querySelectorAll('.parallax');
-let mouseX = 0, mouseY = 0;
-let currentX = 0, currentY = 0;
+    const blocks = document.querySelectorAll('.gsap-fade-up');
 
-document.addEventListener('mousemove', function(e) {
-    // Normalize mouse position (-1 to 1)
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-});
+    if (blocks.length > 0) {
+        console.log('🔍 Homepage blocks found:', blocks.length);
 
-function updateParallax() {
-    // Smooth interpolation
-    const smoothFactor = 1;
-    currentX += (mouseX - currentX) * smoothFactor;
-    currentY += (mouseY - currentY) * smoothFactor;
+        gsap.fromTo(blocks,
+            { opacity: 0, y: 180 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                stagger: 0.3,
+                ease: "back.out(1.7)",
+                onComplete: () => {
+                    blocks.forEach(block => block.classList.add('gsap-visible'));
+                }
+            }
+        );
 
-    parallaxImages.forEach(function(img) {
-        const speedX = parseFloat(img.dataset.speedx) || 0.1;
-        const speedY = parseFloat(img.dataset.speedy) || 0.05;
-        
-        // Increase movement range
-        const xOffset = currentX * 80 * speedX;
-        const yOffset = currentY * 60 * speedY;
-        
-        img.style.transform = `translate(calc(-50% + ${xOffset}px), calc(-50% + ${yOffset}px))`;
-    });
+        // Mouse tracking (homepage only)
+        document.addEventListener('mousemove', function(e) {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
 
-    requestAnimationFrame(updateParallax);
-}
-
-updateParallax();
-    
-// --- TOUCH SUPPORT ---
-document.addEventListener('touchmove', function(e) {
-    const touch = e.touches[0];
-    mouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
-}, { passive: true });
-
-document.addEventListener('touchend', function() {
-    mouseX = 0;
-    mouseY = 0;
-}, { passive: true });
-
-// --- START EVERYTHING ---
-// Start parallax loop
-updateParallax();
-
-// Wait for all images to load
-const allImages = document.querySelectorAll('.parallax-wrapper img');
-let imagesLoaded = 0;
-const totalImages = allImages.length;
-
-if (totalImages === 0) {
-    checkLoadComplete();
-} else {
-    allImages.forEach(function(img) {
-        if (img.complete) {
-            imagesLoaded++;
-            if (imagesLoaded === totalImages) checkLoadComplete();
-        } else {
-            img.addEventListener('load', function() {
-                imagesLoaded++;
-                if (imagesLoaded === totalImages) checkLoadComplete();
+            blocks.forEach((block, i) => {
+                const speed = 0.02 + (i * 0.005);
+                block.style.transform = `translate(${x * 8 * speed}px, ${y * 6 * speed}px)`;
             });
-            img.addEventListener('error', function() {
-                imagesLoaded++;
-                if (imagesLoaded === totalImages) checkLoadComplete();
-            });
-        }
-    });
-}
+        });
+    }
 
-// Fallback: if images take too long, force load after 6 seconds
+    // ==========================
+    // RESUME — ON-LOAD ANIMATION
+    // ==========================
+
+console.log('🔍 Running resume animation...');
+
+// Wait a beat for everything to render
 setTimeout(function() {
-    if (!loader.classList.contains('loader-hidden')) {
-        checkLoadComplete();
+    const resumeCards = document.querySelectorAll('.resume-card');
+    console.log('🔍 Resume cards found:', resumeCards.length);
+
+    if (resumeCards.length > 0) {
+        resumeCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add('visible');
+                console.log('✅ Card', index, 'now visible');
+            }, 100 + (index * 100));
+        });
+    } else {
+        console.warn('⚠️ No .resume-card elements found');
     }
-}, 6000);
+}, 300);
+
+    // ==========================
+    // 3. PROJECTS PAGE — SLIDER
+    // ==========================
+
+    const projectSliders = document.querySelectorAll('.proj-slider-container');
+
+    if (projectSliders.length > 0) {
+        console.log('🔍 Project sliders found:', projectSliders.length);
+
+        // Auto-expand first card in each slider
+        projectSliders.forEach(container => {
+            const firstCard = container.querySelector('.proj-card');
+            if (firstCard) {
+                firstCard.classList.add('proj-expanded');
+            }
+        });
+    }
+
 });
 
+
 // ==========================
-// PROJECTS PAGE — SLIDER LOGIC
+// 4. PROJECTS PAGE — TOGGLE FUNCTION (global)
 // ==========================
 
 function projToggleCard(card) {
-    // If the clicked card is already expanded, collapse it
     if (card.classList.contains('proj-expanded')) {
         card.classList.remove('proj-expanded');
         return;
     }
 
-    // Find all cards in the same slider container
     const container = card.closest('.proj-slider-container');
+    if (!container) return;
+
     const cards = container.querySelectorAll('.proj-card');
-
-    // Remove expanded from all cards in this container
     cards.forEach(c => c.classList.remove('proj-expanded'));
-
-    // Add expanded to clicked card
     card.classList.add('proj-expanded');
 }
 
-// Click outside to collapse
+// Click outside to collapse (global)
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.proj-card')) {
         document.querySelectorAll('.proj-card.proj-expanded').forEach(card => {
@@ -176,51 +112,189 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Auto-expand first card on load for each slider
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.proj-slider-container').forEach(container => {
-        const firstCard = container.querySelector('.proj-card');
-        if (firstCard) {
-            firstCard.classList.add('proj-expanded');
-        }
-    });
-});
+// // ==========================
+// // LOADER + GSAP INTRO
+// // ==========================
 
+// document.addEventListener('DOMContentLoaded', function() {
+    
+//     // --- LOADER ---
+//     const loader = document.getElementById('loader');
+//     const hero = document.getElementById('homeHero');
+//     const heroContent = document.getElementById('heroContent');
+    
+//     // Force loader to show for minimum 4 seconds
+//     const minLoadTime = 4000; // 4 seconds
+//     let loadStart = Date.now();
+    
+//     // GSAP Timeline
+//     const tl = gsap.timeline({
+//         defaults: { duration: 0.3, ease: "power2.out" },
+//         paused: true
+//     });
+    
+//     tl.from("#B1", { yPercent: 100, opacity: 0 })
+//       .from("#B2", { yPercent: 100, opacity: 0 }, "-=0.2")
+//       .from("#B3", { yPercent: 100, opacity: 0 }, "-=0.2")
+//       .from("#B4", { yPercent: 100, opacity: 0 }, "-=0.2")
+//       .from("#B5", { yPercent: -100, opacity: 0 }, "-=0.2")
+//       .from("#B6", { yPercent: -100, opacity: 0 }, "-=0.2")
+//       .from("#Sea", { yPercent: -100, opacity: 0 }, "-=0.2")
+//       .from("#Sky", { yPercent: -100, opacity: 0, duration: 0.5, ease: "bounce" }, "-=0.2")
+//       .call(() => {
+//           // Show hero content after images animate
+//           heroContent.classList.add('visible');
+//       }, [], "-=0.2");
 
+//       console.log('heroContent element:', heroContent);
 
-// ==========================
-// HOME — GSAP STAGGER GRID
-// ==========================
-
-document.addEventListener('DOMContentLoaded', function() {
-    const blocks = document.querySelectorAll('.gsap-fade-up');
-
-    // Staggered entrance
-    gsap.fromTo(blocks, 
-        { opacity: 0, y: 40 },
-        {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-            onComplete: () => {
-                blocks.forEach(block => block.classList.add('gsap-visible'));
-            }
-        }
-    );
-
-    // Optional: Mouse tracking micro-movement on blocks
-    document.addEventListener('mousemove', function(e) {
-        const x = (e.clientX / window.innerWidth - 0.5) * 2;
-        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    
+//     // --- FUNCTION TO HIDE LOADER AND START GSAP ---
+//     function hideLoaderAndStart() {
+//         loader.classList.add('loader-hidden');
         
-        blocks.forEach((block, i) => {
-            const speed = 0.02 + (i * 0.005);
-            block.style.transform = `translate(${x * 8 * speed}px, ${y * 6 * speed}px)`;
-        });
-    });
-});
+//         // Show hero after loader fades
+//         setTimeout(() => {
+//             hero.classList.add('visible');
+//             // Start GSAP timeline
+//             tl.play();
+//         }, 300);
+//     }
+    
+//     // --- CHECK IF EVERYTHING IS LOADED ---
+//     function checkLoadComplete() {
+//         const elapsed = Date.now() - loadStart;
+//         const remaining = minLoadTime - elapsed;
+        
+//         if (remaining > 0) {
+//             // Wait for minimum time
+//             setTimeout(hideLoaderAndStart, remaining);
+//         } else {
+//             hideLoaderAndStart();
+//         }
+//     }
+    
+// // ==========================
+// // PARALLAX — FULL XY MOVEMENT
+// // ==========================
+
+// const parallaxImages = document.querySelectorAll('.parallax');
+// let mouseX = 0, mouseY = 0;
+// let currentX = 0, currentY = 0;
+
+// document.addEventListener('mousemove', function(e) {
+//     // Normalize mouse position (-1 to 1)
+//     mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+//     mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+// });
+
+// function updateParallax() {
+//     // Smooth interpolation
+//     const smoothFactor = 1;
+//     currentX += (mouseX - currentX) * smoothFactor;
+//     currentY += (mouseY - currentY) * smoothFactor;
+
+//     parallaxImages.forEach(function(img) {
+//         const speedX = parseFloat(img.dataset.speedx) || 0.1;
+//         const speedY = parseFloat(img.dataset.speedy) || 0.05;
+        
+//         // Increase movement range
+//         const xOffset = currentX * 80 * speedX;
+//         const yOffset = currentY * 60 * speedY;
+        
+//         img.style.transform = `translate(calc(-50% + ${xOffset}px), calc(-50% + ${yOffset}px))`;
+//     });
+
+//     requestAnimationFrame(updateParallax);
+// }
+
+// updateParallax();
+    
+// // --- TOUCH SUPPORT ---
+// document.addEventListener('touchmove', function(e) {
+//     const touch = e.touches[0];
+//     mouseX = (touch.clientX / window.innerWidth - 0.5) * 2;
+//     mouseY = (touch.clientY / window.innerHeight - 0.5) * 2;
+// }, { passive: true });
+
+// document.addEventListener('touchend', function() {
+//     mouseX = 0;
+//     mouseY = 0;
+// }, { passive: true });
+
+// // --- START EVERYTHING ---
+// // Start parallax loop
+// updateParallax();
+
+// // Wait for all images to load
+// const allImages = document.querySelectorAll('.parallax-wrapper img');
+// let imagesLoaded = 0;
+// const totalImages = allImages.length;
+
+// if (totalImages === 0) {
+//     checkLoadComplete();
+// } else {
+//     allImages.forEach(function(img) {
+//         if (img.complete) {
+//             imagesLoaded++;
+//             if (imagesLoaded === totalImages) checkLoadComplete();
+//         } else {
+//             img.addEventListener('load', function() {
+//                 imagesLoaded++;
+//                 if (imagesLoaded === totalImages) checkLoadComplete();
+//             });
+//             img.addEventListener('error', function() {
+//                 imagesLoaded++;
+//                 if (imagesLoaded === totalImages) checkLoadComplete();
+//             });
+//         }
+//     });
+// }
+
+// // Fallback: if images take too long, force load after 6 seconds
+// setTimeout(function() {
+//     if (!loader.classList.contains('loader-hidden')) {
+//         checkLoadComplete();
+//     }
+// }, 6000);
+// });
+
+
+
+
+// // ==========================
+// // HOME — GSAP STAGGER GRID
+// // ==========================
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     const blocks = document.querySelectorAll('.gsap-fade-up');
+
+//     // Staggered entrance
+//     gsap.fromTo(blocks, 
+//         { opacity: 0, y: 40 },
+//         {
+//             opacity: 1,
+//             y: 0,
+//             duration: 0.8,
+//             stagger: 0.15,
+//             ease: "power3.out",
+//             onComplete: () => {
+//                 blocks.forEach(block => block.classList.add('gsap-visible'));
+//             }
+//         }
+//     );
+
+//     // Optional: Mouse tracking micro-movement on blocks
+//     document.addEventListener('mousemove', function(e) {
+//         const x = (e.clientX / window.innerWidth - 0.5) * 2;
+//         const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        
+//         blocks.forEach((block, i) => {
+//             const speed = 0.02 + (i * 0.005);
+//             block.style.transform = `translate(${x * 8 * speed}px, ${y * 6 * speed}px)`;
+//         });
+//     });
+// });
 
 
 
