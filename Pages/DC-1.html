@@ -29,28 +29,14 @@
         <h1>DC-1</h1>
         <p class="machine-meta">Linux VM · VulnHub · Drupalgeddon2 · SUID Find · Root in 4 Steps</p>
         <div class="attack-summary">
-            <p>DC-1 is a Drupal 7 machine that looks complicated but has a stupid-simple path to root. After initial RCE, the fastest route wasn't cracking database hashes or messing with CMS configs - it was a five-second SUID binary check. Sometimes the easiest win is right in front of you.</p>
+            <p>DC-1 is a Drupal 7 machine that looks complicated but has a stupid-simple path to root. After initial RCE, the fastest route wasn't cracking database hashes or messing with CMS configs - it was a five-second SUID binary check. Sometimes the easiest win is right in front of you</p>
         </div>
     </div>
 
     <!-- EXECUTIVE ABSTRACT -->
-    <div class="executive-abstract">
+    <div class="executive-abstract glass-card">
         <h2>🎯 Executive Abstract</h2>
         <p><strong>The Problem:</strong> Outdated CMS installations are a known risk. But the bigger problem? Once you have a foothold, misconfigured SUID binaries can hand you root in seconds. DC-1 demonstrates both the danger of unpatched software AND the importance of basic privilege escalation checks.</p>
-        
-        <p><strong>The Attack Chain (What Actually Happened):</strong><br>
-        Drupalgeddon2 RCE → www-data shell → Found flag1.txt → Checked SUID binaries → /usr/bin/find had SUID → find . -exec /bin/sh -p → Root in 30 seconds after shell.</p>
-        
-        <p><strong>The Rabbit Holes I Avoided (Or Briefly Fell Into):</strong><br>
-        - Cracking Drupal password hashes from the database<br>
-        - Resetting admin password via MySQL<br>
-        - Logging into the CMS to find "hidden" flags<br>
-        - Kernel exploits for an outdated system</p>
-        
-        <p><strong>Why This Matters for Your Business:</strong><br>
-        The fastest path to root wasn't complicated - it was basic enumeration. Most breaches don't use zero-days. They use misconfigurations like a SUID find binary. Fixing these takes minutes. Finding them takes a pentester who knows where to look.</p>
-        
-        <p><strong>Time to Root:</strong> ~15 minutes after initial shell.</p>
     </div>
 
     <!-- VISUAL TIMELINE -->
@@ -207,17 +193,6 @@ uid=0(root) gid=0(root) groups=0(root)</code></pre>
             <li><strong>Drupalgeddon2 is still effective.</strong> Unpatched CMS installations are low-hanging fruit. Patch or get pwned.</li>
             <li><strong>The simplest path is often the best path.</strong> Don't overcomplicate. Enumerate, identify, execute.</li>
         </ul>
-        
-        <div class="executive-abstract" style="margin-top: 1.5rem;">
-            <h3>🎯 For the Hiring Manager</h3>
-            <p>This box demonstrates:</p>
-            <ul>
-                <li><strong>Efficiency:</strong> From initial shell to root in under 2 minutes. I don't waste time on unnecessary detours.</li>
-                <li><strong>Fundamental knowledge:</strong> SUID enumeration is pentesting 101. I know the basics cold.</li>
-                <li><strong>Tool proficiency:</strong> Drupalgeddon2 exploit, reverse shells, find command abuse - all executed without hand-holding.</li>
-            </ul>
-            <p style="margin-top: 1rem;"><strong>Bottom line:</strong> Give me a foothold, and I'll find the fastest path to root.</p>
-        </div>
         
         <a href="../Walkthrus.html" class="btn-back">← Back to Walkthroughs</a>
     </section>

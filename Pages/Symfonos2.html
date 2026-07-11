@@ -34,10 +34,9 @@
     </div>
 
     <!-- EXECUTIVE ABSTRACT - Your Voice -->
-    <div class="executive-abstract">
-        <h2>🎯 The Short Version (For Busy People)</h2>
-        <p><strong>What happened:</strong> Anonymous SMB share leaked info about FTP backups. ProFTPD 1.3.5 had the mod_copy vuln, letting me copy <code>/etc/passwd</code> and <code>/var/backups/shadow.bak</code> into the SMB share. Grabbed those, cracked <code>aeolus:sergioteamo</code>, SSH'd in. Found LibreNMS on localhost:8080, tunneled to it, reused creds. Exploited CVE-2018-20434 for RCE, got shell as <code>cronus</code>. Then <code>sudo mysql</code> + <code>\! /bin/bash</code> = root. Done.</p>
-        <p><strong>Time to root:</strong> ~75 minutes. <strong>Biggest lesson:</strong> Never assume localhost services are safe. SSH tunneling exposes everything.</p>
+    <div class="executive-abstract glass-card">
+        <h2>🎯 Executive Abstract</h2>
+        <p><strong>What happened:</strong> I found a public file share that anyone could access. It had backup files that shouldn't have been there. Grabbed the password file, cracked a user's password (it was easy - they used their dog's name or something), and logged in. Once inside, I found a web app hiding on the local network that the company thought was safe. It wasn't. Exploited it to get admin access, then used that to become full system admin (root).
     </div>
 
     <!-- VISUAL TIMELINE -->
@@ -228,7 +227,7 @@ root</code></pre>
             <li><strong>ProFTPD mod_copy is stupidly easy to abuse.</strong> If you see 1.3.5, try SITE CPFR/CPTO immediately.</li>
             <li><strong>SSH tunneling changes everything.</strong> Localhost services are NEVER safe if you have any foothold.</li>
             <li><strong>Credential reuse is real.</strong> aeolus:sergioteamo worked everywhere.</li>
-            <li><strong>Always check sudo -l.</strong> <code>sudo mysql</code> + <code>\! /bin/bash</code> is a classic for a reason.</li>
+            <li><strong>Always check sudo -l.</strong> 
         </ul>
         
         <div class="image-card">

@@ -33,15 +33,6 @@
         </div>
     </div>
 
-    <!-- EXECUTIVE ABSTRACT -->
-    <div class="executive-abstract">
-        <h2>🎯 Executive Abstract</h2>
-        <p><strong>What Was Accomplished:</strong> SQL injection bypass, HTML form repair, command injection testing, SSLv2 enumeration, SSH protocol analysis, and the discovery that sometimes old boxes are just broken.</p>
-        <p><strong>The Challenge:</strong> Every single exploit path failed. Samba wasn't running, SSH required ancient crypto, OpenFuck choked on OpenSSL 3.0, and the command injection vector was a ghost. The box was a fortress of obsolescence.</p>
-        <p><strong>Why This Has Immense Value:</strong> Real pentesting isn't always successful. Knowing when to pivot, documenting failures, and extracting lessons from blockers is a critical skill. This box demonstrated SQLi, frontend debugging, and the importance of environment validation.</p>
-        <p><strong>Time Invested:</strong> ~8 hours of pure grind | <strong>Status:</strong> Moved to the "I'll Remember You" folder</p>
-    </div>
-
     <!-- PHASE 1: RECONNAISSANCE -->
     <section class="phase">
         <h2>📡 Phase 1: Reconnaissance</h2>
@@ -180,37 +171,6 @@ Connection closed by 192.168.56.112 port 22
                 <li><strong>SSH Enumeration</strong> — Confirmed user "test" exists, but password unknown</li>
                 <li><strong>Samba Enumeration</strong> — Ports 139/445 were closed (Samba not running)</li>
             </ul>
-        </div>
-
-        <h3>📌 The Real Lesson</h3>
-        <div class="executive-abstract">
-            <p>This box was a fortress of obsolescence. Every modern tool failed. Every exploit was deprecated. Every path was blocked.</p>
-            <p><strong>But I learned more from this failure than from 10 successful boxes.</strong></p>
-            <ul>
-                <li><strong>OpenSSL 3.0 killed OpenFuck</strong> — Sometimes the tools age out</li>
-                <li><strong>Modern SSH won't talk to ancient SSH</strong> — Forcing protocols is a skill</li>
-                <li><strong>Sometimes the box is just broken</strong> — Pivoting is the real skill</li>
-                <li><strong>The struggle is the learning</strong> — 8 hours of no shell = 8 hours of growth</li>
-            </ul>
-        </div>
-
-        <h3>🎯 What Would I Do Differently?</h3>
-        <ul>
-            <li><strong>Kali VM with OpenSSL 1.1.1</strong> — Would have made OpenFuck work</li>
-            <li><strong>Check VMWare version</strong> — Different Kioptrix images have different vulns</li>
-            <li><strong>Try the metasploit mod_ssl module</strong> — Instead of fighting compilation</li>
-            <li><strong>Use Nmap's --script vuln</strong> — Could have found the exact path faster</li>
-        </ul>
-        
-        <div class="executive-abstract" style="margin-top: 2rem; border-color: #ff6b00;">
-            <h3 style="color: #ff6b00;">💀 The Final Word</h3>
-            <p style="font-size: 1.1rem; font-style: italic; text-align: center;">
-                "I came, I saw, I got owned by a 15-year-old CentOS box. <br>
-                But damn, what a ride."
-            </p>
-            <p style="text-align: center; margin-top: 1rem;">
-                <strong>GOONIES NEVER SAY DIE!</strong> 🏴‍☠️
-            </p>
         </div>
         
         <a href="../Walkthrus.html" class="btn-back">← Back to Walkthroughs</a>

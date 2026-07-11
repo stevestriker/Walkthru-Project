@@ -34,13 +34,12 @@
     </div>
 
     <!-- EXECUTIVE ABSTRACT - The "Why You Should Care" -->
-    <div class="executive-abstract">
+    <div class="executive-abstract glass-card">
         <h2>🎯 Executive Abstract</h2>
-        <p><strong>The Problem:</strong> Organizations often leave "low priority" services like SMB and SMTP misconfigured, assuming they pose no real threat. This machine proved otherwise.</p>
+        <p><strong>The Problem:</strong> Organizations often leave "low priority" services like SMB and SMTP misconfigured, assuming they pose no real threat.</p>
         <p><strong>The Approach:</strong> Rather than forcing an attack through the obvious web server, I pivoted through seemingly unrelated services—SMB leaks, SMTP user enumeration, and a forgotten WordPress plugin—to build a complete attack chain.</p>
-        <p><strong>The Outcome:</strong> Full root compromise in under 90 minutes. What could have been dismissed as "just an internal VM" demonstrated how seemingly minor misconfigurations (anonymous SMB share, outdated plugin, relative PATH in SUID binary) create a cascading failure path.</p>
+        <p><strong>The Outcome:</strong> Full root compromise in a few hours. What could have been dismissed as "just an internal VM" demonstrated how seemingly minor misconfigurations (anonymous SMB share, outdated plugin, relative PATH in SUID binary) create a cascading failure path.</p>
         <p><strong>Business Value:</strong> This methodology—enumerate <em>everything</em>, trust <em>nothing</em>, think sideways—directly translates to real-world engagements. The time saved by not brute-forcing or running blind scans? Hours per assessment. The cost of a real breach prevented by catching these misconfigurations? Priceless.</p>
-        <p><strong>Key Lesson:</strong> The most elegant exploit chains don't use zero-days. They use <em>your own misconfigurations against you</em>.</p>
     </div>
 
     <!-- VISUAL TIMELINE -->
@@ -206,13 +205,6 @@ uid=0(root) gid=1000(helios) euid=0(root)</code></pre>
 
     <!-- CONCLUSION -->
     <section class="phase conclusion">
-        <h2>🏁 Conclusion & Key Takeaways</h2>
-        <ul>
-            <li><strong>Never trust default configurations:</strong> Anonymous SMB shares and outdated WordPress plugins led to the initial breach.</li>
-            <li><strong>Think sideways:</strong> SMTP log poisoning turned an LFI into full RCE.</li>
-            <li><strong>Privilege escalation is creative:</strong> PATH hijacking on a SUID binary is a common but often-missed vector.</li>
-            <li><strong>Methodology wins:</strong> Enumerate everything — services, files, hidden directories, and SUID binaries.</li>
-        </ul>
         
         <div class="image-card">
             <img src="../Imgs/symfonos1/root-flag.png" alt="Root flag captured">
