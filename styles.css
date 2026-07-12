@@ -2048,7 +2048,7 @@ footer {
     transform: translateY(20px);
 }
 
-/* Card Background Images (replace with your own) */
+/* Card Background Images */
 .proj-landing-1 { background-image: url('./Imgs/projects/Trang.jpg'); }
 .proj-landing-2 { background-image: url('./Imgs/projects/Spirit.png'); }
 .proj-landing-3 { background-image: url('./Imgs/projects/Pure.png'); }
